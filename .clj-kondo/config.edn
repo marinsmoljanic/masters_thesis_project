@@ -1,0 +1,9 @@
+{:lint-as {nubank.workspaces.core/defcard              cljs.core/def
+           nubank.workspaces.core/deftest              cljs.core/def
+           keechma.next.helix.lib/defnc                cljs.core/defn
+           keechma.next.helix.template/defnt           cljs.core/defn
+           keechma.next.helix.classified/defclassified cljs.core/def
+           keechma.next.toolbox.pipeline/pipeline!     cljs.core/fn}
+ :linters {:unused-binding {:exclude-destructured-keys-in-fn-args true}
+           :unresolved-symbol {:exclude [(keechma.next.helix.lib/defnc [props])
+                                         (keechma.next.helix.template/defnt [configurable slot optional-slot])]}}}
