@@ -5,4 +5,5 @@ public/css/
 .shadow-cljs
 node_modules
 .clj-kondo
+.idea
 .netlify/
