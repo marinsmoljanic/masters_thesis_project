@@ -1,13 +1,10 @@
 (ns app.ui.pages.home
-  "Example homepage 2 3"
   (:require [helix.dom :as d]
             [helix.core :as hx :refer [$]]
-            [keechma.next.helix.core :refer [with-keechma]]
             [keechma.next.helix.lib :refer [defnc]]
             [keechma.next.controllers.router :as router]
-            [keechma.next.helix.classified :refer [defclassified]]
-            [app.ui.components.main :refer [Main]]
-            [app.ui.components.hello :refer [Hello]]))
+            [keechma.next.helix.core :refer [with-keechma]]
+            [keechma.next.helix.classified :refer [defclassified]]))
 
 (defclassified HomepageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
@@ -27,7 +24,6 @@
                            "Uloge")
                  (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 bg-orange-600 hover:bg-orange-500 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "ulogaosobe"})}
-                           "Uloge osoba")
-                 )))
+                           "Uloge osoba"))))
 
 (def Home (with-keechma HomeRenderer))
