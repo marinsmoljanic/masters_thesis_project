@@ -7,7 +7,8 @@
             [keechma.next.helix.classified :refer [defclassified]]
 
             [app.ui.components.pure.shared :refer [AddNewItem]]
-            [app.ui.components.header :refer [Header]]))
+            [app.ui.components.header :refer [Header]]
+            [app.ui.components.forms.osoba :refer [PersonForm]]))
 
 (def osobe
   [{:id      1
@@ -58,9 +59,10 @@
                               osobe)))))
 
 (defnc Renderer [props]
+       (let [var true]
        ($ PageWrapper
           ($ Header {:naslov "Osoba"})
-          ($ Table)
-          ($ AddNewItem)))
+          (if var ($ PersonForm) ($ Table))
+          ($ AddNewItem))))
 
 (def Osoba (with-keechma Renderer))

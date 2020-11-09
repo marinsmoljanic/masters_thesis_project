@@ -13,16 +13,16 @@
           (d/div {:class "flex w-full items-center shadow justify-center py-6 px-2 bg-gray-900 text-gray-700 text-2xl font-thin"}
                  (d/p "Aplikacija upravljanja projektima"))
           (d/div {:class "flex h-screen w-full flex-col items-center justify-center px-2"}
-                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 bg-orange-600 hover:bg-orange-500 text-white text-xl font-thin"
+                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "osoba"})}
                            "Osobe")
-                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 bg-orange-600 hover:bg-orange-500 text-white text-xl font-thin"
+                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "projekt"})}
                            "Projeki")
-                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 bg-orange-600 hover:bg-orange-500 text-white text-xl font-thin"
+                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "uloga"})}
                            "Uloge")
-                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 bg-orange-600 hover:bg-orange-500 text-white text-xl font-thin"
+                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "ulogaosobe"})}
                            "Uloge osoba"))))
 
