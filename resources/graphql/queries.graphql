@@ -1,0 +1,1160 @@
+mutation CreateSessionn($input: CreateSessionInput!) {
+    createSession(input: $input) {
+       session{
+        token
+      }
+    }
+}
+
+query TokenActive($token: String!) {
+    tokenActive(token: $token)
+}
+
+query ValidateJwt {
+    currentAccount {
+        id
+    }
+}
+
+
+query CertificationProgresses($after: String, $before: String, $first: Int, $last: Int, $filter: CertificationProgressFilter) {
+    certificationProgresses (after: $after, before: $before, first: $first, last: $last, filter: $filter) {
+        edges {
+            node {
+                ...minimalCertificationProgressData
+            }
+            cursor
+        }
+        pageInfo {
+            ...pageInfoData
+        }
+    }
+}
+
+query QuizInteractions {
+    quizInteractions {
+        edges {
+            node {
+                ...minimalQuizInteractionData
+            }
+            cursor
+        }
+        pageInfo {
+            ...pageInfoData
+        }
+    }
+}
+
+
+query VrVideos($filter: VrVideoFilter,$after: String, $before: String, $first: Int, $last: Int, $sort: VrVideoSorting) {
+    vrVideos(filter: $filter, after: $after, before: $before, first: $first, last: $last, sort: $sort) {
+        edges {
+            node {
+                ...minimalVrVideoData
+            }
+            cursor
+        }
+        pageInfo {
+            ...pageInfoData
+        }
+    }
+}
+
+query ReviewVideos($filter: VrVideoFilter,$after: String, $before: String, $first: Int, $last: Int, $sort: VrVideoSorting) {
+    vrVideos(filter: $filter, after: $after, before: $before, first: $first, last: $last, sort: $sort) {
+        edges {
+            node {
+                ...vrVideoData
+            }
+            cursor
+        }
+        pageInfo {
+            ...pageInfoData
+        }
+    }
+}
+
+query Notifications {
+    notifications(first: 1000) {
+        edges {
+            node {
+                ...minimalNotificationData
+            }
+            cursor
+        }
+        pageInfo {
+            ...pageInfoData
+        }
+    }
+}
+
+query SimulationsByCourseId($courseId: ID!) {
+    node(id: $courseId) {
+        ... on Course {
+            simulations(first: 500) {
+                edges {
+                    node {
+                        id
+                        imageUrl
+                        title
+                        url
+                    }
+                    cursor
+                }
+                pageInfo {
+                    ...pageInfoData
+                }
+            }
+        }
+    }
+}
+
+query QuizInteractionsByQuizId($quizId: ID!) {
+    node(id: $quizId) {
+        ... on Quiz {
+            quizInteractions(first: 50) {
+                edges {
+                    node {
+                        ...minimalQuizInteractionData
+                    }
+                    cursor
+                }
+                pageInfo {
+                    ...pageInfoData
+                }
+            }
+        }
+    }
+}
+
+query QuizById($id: ID!) {
+    node(id: $id) {
+        ... on Quiz {
+            ...minimalQuizData
+        }
+    }
+}
+
+
+query QuizByLessonId($lessonId: ID!) {
+    node(id: $lessonId) {
+        ... on Lesson {
+            quiz {
+                ...minimalQuizData
+            }
+        }
+    }
+}
+
+query QuestionsByQuizId($quizId: ID!) {
+  node(id: $quizId) {
+    ... on Quiz {
+      questions(first: 500) {
+        edges {
+          node {
+            ...minimalQuestionData
+            answers(first: 500) {
+              edges {
+                node {
+                  ...minimalAnswerData
+
+                }
+                cursor
+              }
+              pageInfo {
+                ...pageInfoData
+              }
+            }
+
+          }
+          cursor
+        }
+        pageInfo {
+          ...pageInfoData
+        }
+      }
+    }
+  }
+}
+
+query LessonsByCourseId($courseId: ID!) {
+    node(id: $courseId) {
+        ... on Course {
+            lessons(first: 100, sort: {title: ASC}) {
+                edges {
+                    node {
+                        id
+                        title
+                        seen
+                        imageUrl
+                        videoUrl
+                        videoPrompt {
+                          id
+                          title
+                          imageUrl
+                          question
+                          videoPromptChoices(first: 10){
+                            edges {
+                              node {
+                                id
+                                seen
+                                imageUrl
+                                title
+                                textbookUrl
+                                videoUrl
+                                transcript
+                                subtitleUrl
+                              }
+                            }
+                          }
+                        }
+                        quiz {
+                          id
+                          title
+                          quizInteractions(first: 1000){
+                            edges {
+                              node {
+                                score
+                              }
+                            }
+                          }
+                        }
+                        activity {
+                          id
+                          imageUrl
+                          url
+                          title
+                          seen
+                          isSimulation
+                        }
+                    }
+                    cursor
+                }
+                pageInfo {
+                    ...pageInfoData
+                }
+            }
+        }
+    }
+}
+
+query LessonById($lessonId: ID! $languageCode: LanguageCode) {
+    node(id: $lessonId) {
+        ... on Lesson {
+          id
+          description
+          title
+          videoUrl
+          imageUrl
+          seen
+          textbookUrl
+          answerbookUrl
+          subtitlePath
+
+          textbook(languageCode: $languageCode){
+            textbookBody
+            answerKeyBody
+          }
+
+          transcript(languageCode: $languageCode)
+          availableTranscriptTranslations {
+            language
+            languageCode
+          }
+          availableTextbookTranslations {
+            language
+            languageCode
+          }
+          course {
+              id
+          }
+
+          activity {
+            id
+            imageUrl
+            url
+            title
+            seen
+            isSimulation
+          }
+
+          videoPrompt {
+              id
+              title
+              imageUrl
+              question
+              videoPromptChoices(first: 10){
+                edges {
+                  node {
+                    id
+                    seen
+                    imageUrl
+                    title
+                    textbookUrl
+                    videoUrl
+                    transcript
+                    subtitleUrl
+                  }
+                }
+              }
+            }
+        }
+    }
+}
+
+query vrVideoById($id: ID!){
+  node(id: $id) {
+    ... on VrVideo {
+      ...vrVideoData
+    }
+  }
+}
+
+query CourseById($courseId: ID! $filter: VrVideoFilter) {
+    node(id: $courseId) {
+        ... on Course {
+            ...minimalCourseData
+        }
+    }
+}
+
+query CertificationProgressById($certId: ID!) {
+    node(id: $certId) {
+        ... on CertificationProgress {
+            ...singleCertificationProgressData
+        }
+    }
+}
+
+query CertificationProgressStepsByCertificationId($certId: ID!) {
+    node(id: $certId) {
+        ... on CertificationProgress {
+            steps(first:500){
+                pageInfo {
+                    ...pageInfoData
+                }
+                edges{
+                    cursor
+                    node{
+                        ...certificationStepData
+                    }
+                }
+            }
+        }
+    }
+}
+query Courses($after: String, $before: String, $first: Int, $last: Int, $videoFilter: VrVideoFilter, $filter: CourseFilter ) {
+    courses(after: $after, before: $before, first: $first, last: $last, filter: $filter ) {
+        edges {
+            node {
+              id
+              name
+              videoUrl
+              imageUrl
+              createVrTutorialVideoSeen
+              lastLessonWatched {
+                  id
+              }
+              lessons(first: 1 sort: {title: ASC}) {
+                  edges {
+                      node {
+                          id
+                          imageUrl
+                          videoUrl
+                          seen
+                      }
+                  }
+              }
+              vrVideos(first: 100 filter: $videoFilter){
+                edges {
+                    node {
+                        ...minimalVrVideoData
+                    }
+                    cursor
+                }
+              }
+              courseProgress {
+                  progress
+                  badge
+                  certificate
+              }
+            }
+            cursor
+        }
+        pageInfo {
+            ...pageInfoData
+        }
+    }
+}
+
+query CurrentAccount {
+    currentAccount {
+        ...accountData
+    }
+}
+
+
+query CertificationExam{
+  certificationExam(first: 100){
+    edges {
+        node {
+            id
+            cost
+            description
+            imageUrl
+            mockQuizId
+            mockQuiz {
+                id
+                questions(first:100){
+                    edges {
+                        node {
+                            id
+                        }
+                    }
+                }
+            }
+            name
+            questionsCount
+            shortDescription
+            status {
+                ...certificationExamStatusData
+            }
+        }
+    }
+  }
+}
+
+
+query CertificationExamById($id: ID!) {
+    node(id: $id) {
+        ... on CertificationExam {
+            ...certificationExamData
+        }
+    }
+}
+
+
+query VideoPrompt($id: ID!){
+  node(id: $id){
+    ... on VideoPrompt {
+      id
+      imagePath
+      imageUrl
+      question
+      title
+      videoPromptChoices(first: 100) {
+        edges {
+          node {
+            id
+            seen
+            imageUrl
+            subtitlePath
+            subtitleUrl
+            textbookPath
+            textbookUrl
+            title
+            transcript
+            videoPath
+            videoUrl
+          }
+        }
+      }
+    }
+  }
+}
+
+query Lessons($first: Int, $filter: LessonFilter){
+  lessons(first: $first, filter: $filter){
+    edges {
+      node {
+        id
+        title
+        imageUrl
+        videoUrl
+        seen
+        course {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+query supportedCourses ($after: String, $before: String, $first: Int, $last: Int, $typeFilter: CourseFilter){
+    supportedCourse(after: $after, before: $before, first: $first, last: $last, filter: $typeFilter) {
+        edges {
+            node {
+                id
+                name
+                courseType
+                homepageImagePath
+                homepageVideoPath
+                homepageImageUrl
+                homepageVideoUrl
+            }
+        }
+    }
+}
+
+mutation DestroySession {
+    destroySession{
+        result
+    }
+}
+
+
+mutation AcceptTerms{
+    acceptTerms{
+        result
+    }
+}
+
+mutation CreateCertificationProgressPayment($input: CreateCertificationProgressPaymentInput!){
+    createCertificationProgressPayment(input: $input){
+        certificationProgress {
+            ...minimalCertificationProgressData
+        }
+    }
+}
+
+mutation CheckNotification($input: CheckNotificationInput!){
+    checkNotification(input: $input){
+        result
+    }
+}
+
+mutation DestroyNotification($input: DestroyNotificationInput!){
+    destroyNotification(input: $input){
+        result
+    }
+}
+
+mutation UpdateAccount($input: UpdateAccountInput!) {
+    updateAccount(input: $input) {
+        account {
+            ...accountData
+        }
+    }
+}
+
+mutation RegisterAccount($input: RegisterAccountInput!) {
+    registerAccount(input: $input) {
+        session {
+            ...sessionData
+        }
+    }
+}
+
+mutation CreateSession($input: CreateSessionInput!) {
+    createSession(input: $input) {
+        session {
+            ...sessionData
+        }
+    }
+}
+
+
+mutation CreateCourseInteraction($input: CreateCourseInteractionInput!){
+    createCourseInteraction(input: $input) {
+        courseInteraction {
+            ...courseInteractionData
+        }
+    }
+}
+
+mutation CreateLessonInteraction($input: CreateLessonInteractionInput!){
+    createLessonInteraction(input: $input) {
+        lessonInteraction {
+            ...lessonInteractionData
+        }
+    }
+}
+
+mutation CreateVrVideo($input: CreateVrVideoInput!) {
+    createVrVideo(input: $input) {
+        vrVideo {
+            ...vrVideoData
+        }
+    }
+}
+
+mutation CreateQuizInteraction($input: CreateQuizInteractionInput!){
+    createQuizInteraction(input: $input){
+        quizInteraction {
+            ...quizInteractionData
+            submissions(first: 100) {
+                edges {
+                    node {
+                        ...submissionData
+                    }
+                }
+                pageInfo {
+                    ...pageInfoData
+                }
+            }
+        }
+    }
+}
+
+mutation CreateActivityInteraction($input: CreateActivityInteractionInput!){
+    createActivityInteraction(input: $input){
+      activityInteraction {
+        id
+      }
+    }
+}
+
+mutation CreateVideoPromptChoiceInteraction($input: CreateVideoPromptChoiceInteractionInput!){
+    createVideoPromptChoiceInteraction(input: $input){
+      videoPromptChoiceInteraction {
+        id
+      }
+    }
+}
+
+mutation ReviewVrVideo($input: ReviewVrVideoInput!){
+    reviewVrVideo(input: $input){
+      vrVideo {
+       id
+      }
+    }
+}
+
+
+mutation CreateVrVideoRating($input: CreateVrVideoRatingInput!){
+    createVrVideoRating(input: $input){
+        vrVideoRating {
+          id
+        }
+    }
+}
+
+mutation SendPasswordResetEmail($input: SendPasswordResetEmailInput!) {
+    sendPasswordResetEmail(input: $input) {
+        result
+    }
+}
+
+mutation SendVerificationEmail($input: SendVerificationEmailInput!) {
+    sendVerificationEmail(input: $input) {
+        result
+    }
+}
+
+
+mutation StartCertificationProgressExam($input: StartCertificationProgressExamInput!){
+    startCertificationProgressExam(input: $input){
+        result
+    }
+}
+
+#mutation UpdateAccount($input: UpdateAccountInput!){
+#    updateAccount(input: $input){
+#        ...accountData
+#    }
+#}
+
+mutation UpdateCertificationProgress($input: UpdateCertificationProgressInput!){
+    updateCertificationProgress(input: $input){
+      certificationProgress{
+        ...minimalCertificationProgressData
+      }
+    }
+}
+mutation UpdateVrVideoRating($input: UpdateVrVideoRatingInput!){
+    updateVrVideoRating(input: $input){
+        ...vrVideoRatingData
+    }
+}
+mutation VerifyEmail($input: VerifyEmailInput!){
+    verifyEmail(input: $input){
+        result
+    }
+}
+
+mutation scheduleReminder($input: ScheduleReminderInput!) {
+  scheduleReminder(input: $input) {
+    notification {
+      id
+    }
+  }
+}
+
+mutation socialAuth($input: SocialAuthInput!){
+  socialAuth(input: $input){
+		session{
+      token
+      cdnCookies
+    }
+  }
+}
+mutation certificationExamPhotoIdUploadUrls{
+    certificationExamPhotoIdUploadUrls{
+        faceUploadLink
+        idUploadLink
+    }
+}
+
+mutation certificationExamAuth($input: CertificationExamAuthInput!){
+    certificationExamAuth(input: $input){
+        certificationExamStatus {
+            ...certificationExamStatusData
+        }
+    }
+}
+
+mutation certificationExamPayment($input: CertificationExamPaymentInput!){
+  certificationExamPayment(input: $input){
+    certificationExamStatus {
+        canBeAttendedUntil
+        isFinished
+        isPaid
+        isStarted
+        score
+    }
+  }
+}
+
+mutation certificationExamAttend($input: CertificationExamAttendInput!){
+    certificationExamAttend(input: $input){
+      question {
+        id
+        body
+        imageBody
+        answers(first: 50){
+          edges {
+            node {
+              id
+              body
+              imageBody
+            }
+          }
+        }
+        firstHint
+        secondHint
+
+      }
+      certificationExamStatus {
+        ...certificationExamStatusData
+      }
+    }
+}
+
+mutation certificationExamPause($input: CertificationExamPauseInput!){
+  certificationExamPause(input: $input){
+    certificationExamStatus {
+      ...certificationExamStatusData
+    }
+  }
+}
+
+mutation certificationExamRequestEmailVerification($input: CertificationExamRequestEmailVerificationInput) {
+  certificationExamRequestEmailVerification(input: $input) {
+    cookieToken
+    certificationExamStatus {
+      ...certificationExamStatusData
+    }
+  }
+}
+
+mutation certificationExamVerifyEmail($input: CertificationExamVerifyEmailInput) {
+  certificationExamVerifyEmail(input: $input) {
+    certificationExamStatus {
+      ...certificationExamStatusData
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fragment certificationExamStatusData on certificationExamStatus {
+  answeredQuestions
+  canBeAttendedUntil
+  canBeStartedUntil
+  isAuthenticated
+  isFinished
+  isPaid
+  isStarted
+  isPaused
+  score
+  timeLeft
+  emailVerificationRequested
+  emailVerified
+}
+
+
+fragment vrVideoRatingData on vrVideoRating {
+    id
+    score
+    vrVideo {
+      id
+      ratingCount
+    }
+}
+
+
+fragment vrVideoData on VrVideo {
+    course {
+        id
+    }
+    creator {
+        id
+        isAdmin
+        firstName
+        lastName
+    }
+    exposure
+    id
+    imageUrl
+    insertedAt
+    isProcessed
+    quiz {
+        id
+    }
+    rating
+    ratingCount
+    reviewState
+    reviewedAt
+    reviewer {
+        id
+    }
+    title
+    type
+    uploadUrl
+    url
+    usersRating {
+        id
+    }
+}
+
+fragment courseInteractionData on CourseInteraction {
+    id
+    certificateUrl
+    course {
+        id
+    }
+    openBadgeSignature
+}
+
+fragment lessonInteractionData on LessonInteraction {
+    id
+    insertedAt
+    lesson {
+        id
+        seen
+    }
+}
+
+
+
+fragment quizInteractionData on QuizInteraction {
+    id
+    insertedAt
+    quiz {
+        id
+    }
+    score
+}
+
+fragment submissionData on Submission{
+    answer {
+        id
+        body
+        imageBody
+    }
+    explanation
+    id
+    isCorrect
+    question {
+        id
+        body
+        imageBody
+    }
+}
+
+fragment certificationStepData on CertificationStep {
+    id
+    value
+    description
+    type
+    title
+}
+
+fragment minimalCertificationProgressData on CertificationProgress {
+    id
+    account{
+        email
+    }
+    certificateUrl
+    certificationEntity{
+        id
+        description
+        name
+    }
+    course{
+        id
+        name
+        imageUrl
+    }
+    insertedAt
+    isAuthenticated
+    isCompleted
+    isPayed
+    steps(first:500){
+        edges{
+            node{
+                value
+            }
+        }
+    }
+}
+
+fragment singleCertificationProgressData on CertificationProgress {
+    course{
+        imageUrl
+    }
+}
+
+fragment minimalQuizInteractionData on QuizInteraction {
+    id
+    score
+}
+
+fragment minimalNotificationData on Notification {
+    id
+    seen
+    body
+}
+
+fragment minimalLessonData on Lesson {
+    id
+    description
+    title
+    videoUrl
+    imageUrl
+    seen
+    availableTranscriptTranslations {
+      language
+      languageCode
+    }
+    course {
+        id
+    }
+
+}
+
+fragment minimalVrVideoData on VrVideo {
+    id
+    imageUrl
+    title
+    reviewState
+    rating
+    ratingCount
+    usersRating {
+      id
+      score
+    }
+}
+
+fragment certificationExamData on CertificationExam {
+    id
+    cost
+    description
+    imageUrl
+    mockQuizId
+    mockQuiz {
+        id
+        questions(first:100){
+            edges {
+                node {
+                    id
+                    body
+                    imageBody
+                    answers(first: 50){
+                        edges {
+                            node {
+                                id
+                                body
+                                imageBody
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    name
+    questionsCount
+    shortDescription
+    status {
+        ...certificationExamStatusData
+    }
+}
+
+fragment minimalCourseData on Course {
+    id
+    name
+    videoUrl
+    imageUrl
+    courseType
+    createVrTutorialVideoSeen
+    lastLessonWatched {
+        id
+    }
+    lessons(first: 1 sort: {title: ASC}) {
+        edges {
+            node {
+                id
+                imageUrl
+                videoUrl
+                seen
+            }
+        }
+    }
+    vrVideos(first: 100 filter: $filter){
+      edges {
+          node {
+              ...minimalVrVideoData
+          }
+          cursor
+      }
+    }
+    vrVideoExamples(first: 100){
+      edges {
+        node {
+          id
+          title
+          videoPath
+          imagePath
+        }
+      }
+    }
+    courseProgress {
+        progress
+        badge
+        certificate
+    }
+}
+
+fragment pageInfoData on PageInfo {
+    endCursor
+    hasNextPage
+    hasPreviousPage
+    startCursor
+}
+
+fragment courseProgressData on CourseProgress {
+    badge
+    course {
+        id
+        imageUrl
+        name
+    }
+    certificate
+    progress
+}
+
+fragment sessionData on Session {
+    token
+    cdnCookies
+}
+
+fragment accountData on Account {
+    id
+    email
+    emailVerifiedAt
+    termsAccepted
+    isAdmin
+    firstName
+    lastName
+    tier
+}
+
+fragment minimalQuizData on Quiz {
+    id
+    insertedAt
+    quizType
+    title
+}
+
+fragment minimalQuestionData on Question {
+    id
+    body
+    firstHint
+    secondHint
+    imageBody
+    insertedAt
+}
+
+fragment minimalAnswerData on Answer {
+    id
+    body
+    incorrectMessage
+    isCorrect
+    imageBody
+    insertedAt
+}

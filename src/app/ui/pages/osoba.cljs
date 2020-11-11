@@ -3,10 +3,9 @@
             [helix.core :as hx :refer [$]]
             [keechma.next.helix.lib :refer [defnc]]
             [keechma.next.controllers.router :as router]
-            [keechma.next.helix.core :refer [with-keechma]]
+            [keechma.next.helix.core :refer [with-keechma dispatch call use-sub]]
             [keechma.next.helix.classified :refer [defclassified]]
 
-            [app.ui.components.pure.shared :refer [AddNewItem]]
             [app.ui.components.header :refer [Header]]
             [app.ui.components.forms.osoba :refer [PersonForm]]))
 
@@ -59,10 +58,17 @@
                               osobe)))))
 
 (defnc Renderer [props]
-       (let [var true]
+       (let [person-form-info (use-sub props :person-form)
+             is-open? (:is-form-open? person-form-info)]
        ($ PageWrapper
           ($ Header {:naslov "Osoba"})
-          (if var ($ PersonForm) ($ Table))
-          ($ AddNewItem))))
+          (if is-open? ($ PersonForm) ($ Table))
+
+          (d/div {:class "flex justify-end py-8 px-8 absolute bottom-0 w-full"}
+                 (d/button {:class "rounded-full bg-orange-600 text-white h-20 w-20 justify-center items-center text-4xl font-thin"
+                            :on-click #(dispatch props :person-form :toggle nil)} "+"))
+
+
+          )))
 
 (def Osoba (with-keechma Renderer))

@@ -5,6 +5,7 @@
   codox/codox #:mvn{:version "0.10.7"},
   com.stuartsierra/dependency #:mvn{:version "1.0.0"},
   emotion-cljs #:mvn{:version "0.1.1"},
+  floatingpointio/graphql-builder #:mvn{:version "0.1.13"},
   funcool/promesa #:mvn{:version "5.1.0"},
   hodgepodge #:mvn{:version "0.1.3"},
   keechma.next/toolbox

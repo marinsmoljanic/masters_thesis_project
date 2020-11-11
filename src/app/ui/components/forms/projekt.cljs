@@ -3,8 +3,7 @@
             [helix.core :as hx :refer [$]]
             [keechma.next.helix.lib :refer [defnc]]
             [keechma.next.controllers.router :as router]
-            [keechma.next.helix.core :refer [with-keechma]]
+            [keechma.next.helix.core :refer [with-keechma dispatch]]
             [keechma.next.helix.classified :refer [defclassified]]
 
-            [app.ui.components.pure.shared :refer [AddNewItem]]
             [app.ui.components.header :refer [Header]]))

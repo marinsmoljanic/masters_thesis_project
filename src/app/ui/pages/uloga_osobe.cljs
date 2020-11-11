@@ -3,11 +3,10 @@
             [helix.core :as hx :refer [$]]
             [keechma.next.helix.lib :refer [defnc]]
             [keechma.next.controllers.router :as router]
-            [keechma.next.helix.core :refer [with-keechma]]
+            [keechma.next.helix.core :refer [with-keechma dispatch]]
             [keechma.next.helix.classified :refer [defclassified]]
 
-            [app.ui.components.header :refer [Header]]
-            [app.ui.components.pure.shared :refer [AddNewItem]]))
+            [app.ui.components.header :refer [Header]]))
 
 (defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
@@ -41,6 +40,13 @@
        ($ PageWrapper
           ($ Header {:naslov "Uloga osobe"})
           ($ Table)
-          ($ AddNewItem)))
+
+
+          (d/div {:class "flex justify-end py-8 px-8 absolute bottom-0 w-full"}
+                 (d/button {:class "rounded-full bg-orange-600 text-white h-20 w-20 justify-center items-center text-4xl font-thin"} "+"
+                           :on-click #(dispatch props :person-form :toggle nil)))
+
+
+))
 
 (def UlogaOsobe (with-keechma Renderer))

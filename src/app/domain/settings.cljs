@@ -1,5 +1,5 @@
 (ns app.domain.settings)
 
-(def gql-endpoint (env-var "https://localhost:8000"))
+(def gql-endpoint "https://localhost:8000")
 
 (def jwt-ls-name "project-management-jwt")

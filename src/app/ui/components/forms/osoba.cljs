@@ -3,13 +3,12 @@
             [helix.core :as hx :refer [$]]
             [keechma.next.helix.lib :refer [defnc]]
             [keechma.next.controllers.router :as router]
-            [keechma.next.helix.core :refer [with-keechma]]
+            [keechma.next.helix.core :refer [with-keechma dispatch]]
             [keechma.next.helix.classified :refer [defclassified]]
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]
 
             [app.ui.components.inputs :refer [wrapped-input]]
 
-            [app.ui.components.pure.shared :refer [AddNewItem]]
             [app.ui.components.header :refer [Header]]))
 
 (defnc RenderErrors [{:keys [error] :as props}]
@@ -39,7 +38,8 @@
                       #_(when error ($ RenderErrors {:error error}))
 
                       (d/button {:class "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
-                                             text-md font-medium text-white bg-transparent hover:bg-gray-700"} "Spremi")
+                                             text-md font-medium text-white bg-transparent hover:bg-gray-700"
+                                 :on-click #(dispatch props :person-form :toggle nil)} "Spremi")
                      )))
 
 (def PersonForm (with-keechma Renderer))
