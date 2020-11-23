@@ -1,5 +1,6 @@
 (ns app.app
   (:require [app.controllers.forms.person]
+            [app.controllers.datasources.person]
 
             [keechma.next.controllers.router]
             [keechma.next.controllers.entitydb]
@@ -29,6 +30,8 @@
                      :keechma.controller/type :keechma/dataloader}
 
         :person-form {:keechma.controller/params true}
+        :person {:keechma.controller/params true}
+
         }
    }
   )

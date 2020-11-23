@@ -43,10 +43,10 @@
 
 
           (d/div {:class "flex justify-end py-8 px-8 absolute bottom-0 w-full"}
-                 (d/button {:class "rounded-full bg-orange-600 text-white h-20 w-20 justify-center items-center text-4xl font-thin"} "+"
-                           :on-click #(dispatch props :person-form :toggle nil)))
+                 (d/button {:class "rounded-full bg-orange-600 text-white h-20 w-20 justify-center items-center text-4xl font-thin"
+                            :on-click #(dispatch props :person-form :toggle nil)} "+"))
 
 
-))
+          ))
 
 (def UlogaOsobe (with-keechma Renderer))
