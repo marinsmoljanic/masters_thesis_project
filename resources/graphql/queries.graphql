@@ -1,8 +1,51 @@
-query Osobe {
-    allOsoba {
-        IdOsobe
-        PrezimeOsobe
-        ImeOsobe
-        OIB
+query Persons{
+    allPerson{
+        id
+        FirstName
+        LastName
+        PersonalId
     }
 }
+
+query Projects{
+    allProject{
+        id
+        Name
+        Description
+        StartDate
+        EndDate
+    }
+}
+
+query Roles{
+    allRole{
+        id
+        Name
+    }
+}
+
+query PersonById($id: String!) {
+    personById(id: $id) {
+        LastName
+        FirstName
+    }
+}
+
+query PersonRoleByPersonId($personid: String!) {
+    personRoleByPersonid(personid: $personid) {
+        ProjectCode
+        PersonId
+        RoleId
+        AssignmentDate
+    }
+}
+
+mutation CreatePerson($personid: String!) {
+    createPerson(personid: $personid) {
+        ProjectCode
+        PersonId
+        RoleId
+        AssignmentDate
+    }
+}
+

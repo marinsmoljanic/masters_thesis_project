@@ -18,12 +18,9 @@
                            "Osobe")
                  (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "projekt"})}
-                           "Projeki")
+                           "Projekti")
                  (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
                             :on-click #(router/redirect! props :router {:page "uloga"})}
-                           "Uloge")
-                 (d/button {:class "flex rounded w-2/3 justify-center my-8 py-2 px-8 border border-solid border-orange-400 hover:bg-gray-700 text-white text-xl font-thin"
-                            :on-click #(router/redirect! props :router {:page "ulogaosobe"})}
-                           "Uloge osoba"))))
+                           "Uloge"))))
 
 (def Home (with-keechma HomeRenderer))

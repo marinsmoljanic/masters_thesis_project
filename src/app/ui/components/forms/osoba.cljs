@@ -22,20 +22,23 @@
                                       (.preventDefault e)
                                       (dispatch props :person-form :keechma.form/submit))}
 
-                      (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Ime osobe")
+                      (d/p {:class "text-sm text-grayLight text-left w-full mt-6"} "Ime osobe")
                       (wrapped-input {:keechma.form/controller :person-form
                                       :input/type              :text
-                                      :input/attr              :text
+                                      :input/attr              :name
                                       :placeholder             "Ime"})
 
-                      (d/div {:class "max-width-full h-6 transparent"})
-                      (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Prezime osobe")
+                      (d/p {:class "text-sm text-grayLight text-left w-full mt-6"} "Prezime osobe")
                       (wrapped-input {:keechma.form/controller :person-form
                                       :input/type              :text
-                                      :input/attr              :text
+                                      :input/attr              :surname
                                       :placeholder             "Prezime"})
 
-                      #_(when error ($ RenderErrors {:error error}))
+                      (d/p {:class "text-sm text-grayLight text-left w-full mt-6"} "OIB")
+                      (wrapped-input {:keechma.form/controller :person-form
+                                      :input/type              :text
+                                      :input/attr              :surname
+                                      :placeholder             "OIB"})
 
                       (d/button {:class "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
                                              text-md font-medium text-white bg-transparent hover:bg-gray-700"

@@ -4,5 +4,10 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
   },
   theme: {
-  }
+  },
+  variants: {
+      extend: {
+        backgroundColor: ['active'],
+      }
+    }
 };

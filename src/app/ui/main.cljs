@@ -5,19 +5,23 @@
             [helix.dom :as d]
 
             [app.ui.pages.home :refer [Home]]
-            [app.ui.pages.uloga :refer [Uloga]]
-            [app.ui.pages.projekt :refer [Projekt]]
-            [app.ui.pages.osoba :refer [Osoba]]
-            [app.ui.pages.uloga-osobe :refer [UlogaOsobe]]))
+            [app.ui.pages.role :refer [Role]]
+            [app.ui.pages.project :refer [Project]]
+            [app.ui.pages.person :refer [Person]]
+            [app.ui.pages.person-role :refer [PersonRoleForm]]
+            [app.ui.pages.person-edit :refer [PersonEdit]]
+            [app.ui.pages.project-edit :refer [ProjectEdit]]))
 
 (defnc MainRenderer [props]
   (let [{:keys [page]} (use-sub props :router)]
     (case page
       "home" ($ Home)
-      "osoba" ($ Osoba)
-      "projekt" ($ Projekt)
-      "uloga" ($ Uloga)
-      "ulogaosobe" ($ UlogaOsobe)
+      "osoba" ($ Person)
+      "projekt" ($ Project)
+      "uloga" ($ Role)
+      "ulogaosobe" ($ PersonRoleForm)
+      "personedit" ($ PersonEdit)
+      "projectedit" ($ ProjectEdit)
 
       (d/div "404"))))
 
