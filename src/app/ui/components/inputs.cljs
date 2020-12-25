@@ -106,6 +106,35 @@
                       &          element-props}))))
 (def TextInput (with-keechma TextInputRenderer))
 
+;; PLAIN-TEXT
+(defnc PlainTextInputRenderer [{:keechma.form/keys [controller]
+                           :input/keys        [attr]
+                           :as                props}]
+       (let [element-props (get-element-props {} props)
+             value-getter (hooks/use-callback [attr] #(form/get-data-in % attr))
+             value (use-meta-sub props controller value-getter)]
+            (d/div {:class "relative w-full"}
+                   (when (:prepend/icon props)
+                         (d/div {:class "absolute top-0 left-0 flex pb-3 items-center"
+                                 :style {:height "calc(100% - 2px)"}}
+                                (d/i {:class (str "fal text-grayLight " (:prepend/icon props))})))
+                   (when (:iconend props)
+                         (d/div {:class "absolute top-0 right-0 flex h-full items-center"}
+                                (d/i {:class (str "fal mb-3 text-2xl text-green " (:iconend props))})))
+                   (d/input
+                     {:value     (str value)
+                      :disabled (:disable props)
+                      :on-change #(dispatch props
+                                            controller
+                                            :keechma.form.on/change
+                                            {:value (.. % -target -value) :attr attr})
+                      :on-blur   #(dispatch props
+                                            controller
+                                            :keechma.form.on/blur
+                                            {:value (.. % -target -value) :attr attr})
+                      &          element-props}))))
+(def PlainTextInput (with-keechma TextInputRenderer))
+
 ;; TEXT-AREA
 (defnc TextAreaRenderer [{:keechma.form/keys [controller]
                           :input/keys        [attr]
@@ -203,13 +232,13 @@
 (def SelectInput (with-keechma SelectInputRenderer))
 
 (defmulti input (fn [props] (:input/type props)))
-(defmethod input :text     [props] ($ TextInput {& props}))
-(defmethod input :password [props] ($ PasswordInput {& props}))
-(defmethod input :search   [props] ($ TextInput {& props}))
-(defmethod input :textarea [props] ($ TextArea {& props}))
-(defmethod input :checkbox [props] ($ Checkbox {& props}))
-(defmethod input :select   [props] ($ SelectInput {& props}))
-
+(defmethod input :text      [props] ($ TextInput {& props}))
+(defmethod input :textPlain [props] ($ PlainTextInput {& props}))
+(defmethod input :password  [props] ($ PasswordInput {& props}))
+(defmethod input :search    [props] ($ TextInput {& props}))
+(defmethod input :textarea  [props] ($ TextArea {& props}))
+(defmethod input :checkbox  [props] ($ Checkbox {& props}))
+(defmethod input :select    [props] ($ SelectInput {& props}))
 
 (defmulti wrapped-input (fn [props] (:input/type props)))
 (defmethod wrapped-input :default [props] (input props))
@@ -218,6 +247,15 @@
            (d/fieldset {:class (str "margin-auto h-16 w-full input-field-focus" (:assoc/class props))}
                        (input (assoc props :class (str (if (not (:prepend/icon props))
                                                          "min-w-full pb-3 pt-3 pl-2 outline-none bg-transparent border-b border-solid border-orange-500
+                                                          focus:border-orange-200 hover:bg-gray-700 focus:bg-gray-900"
+                                                         "min-w-full pb-3 pt-3 pl-8 outline-none bg-transparent border-b border-red-600 focus:border-2")
+                                                       (when (:errors props) "border-redDark"))))
+                       ($ Errors {& props})))
+
+(defmethod wrapped-input :textPlain [props]
+           (d/fieldset {:class (str "margin-auto h-16 w-full input-field-focus" (:assoc/class props))}
+                       (input (assoc props :class (str (if (not (:prepend/icon props))
+                                                         "min-w-full pb-3 pt-3 pl-2 outline-none bg-transparent
                                                           focus:border-orange-200 hover:bg-gray-700 focus:bg-gray-900"
                                                          "min-w-full pb-3 pt-3 pl-8 outline-none bg-transparent border-b border-red-600 focus:border-2")
                                                        (when (:errors props) "border-redDark"))))

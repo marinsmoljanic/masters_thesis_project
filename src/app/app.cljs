@@ -1,23 +1,24 @@
 (ns app.app
-  (:require [app.controllers.datasources.role]
-            [app.controllers.datasources.person]
-            [app.controllers.datasources.project]
-            [app.controllers.datasources.person-role]
-            [app.controllers.datasources.person-role-by-personid]
+  (:require ["react-dom" :as rdom]
+            [app.controllers.forms.role]
+            [app.controllers.forms.person]
+            [app.controllers.forms.project]
+            [app.controllers.forms.person-role]
+
+            [app.controllers.forms.person-edit]
+            [app.controllers.forms.project-edit]
+            [app.controllers.forms.role-edit]
 
             [keechma.next.controllers.router]
             [keechma.next.controllers.entitydb]
             [keechma.next.controllers.dataloader]
             [keechma.next.controllers.subscription]
 
-            [app.controllers.forms.person]
-            [app.controllers.forms.project]
-            [app.controllers.forms.person-role]
-            [app.controllers.forms.person-edit]
-            [app.controllers.forms.project-edit]
-
-            ["react-dom" :as rdom]))
-
+            [app.controllers.datasources.role]
+            [app.controllers.datasources.person]
+            [app.controllers.datasources.project]
+            [app.controllers.datasources.person-role]
+            [app.controllers.datasources.person-role-by-personid]))
 
 (defn page-equal? [router page] (let [route-page (:page router)] (= route-page page)))
 (defn page-eq? [page] (fn [{:keys [router]}] (= page (:page router))))
@@ -25,7 +26,6 @@
 (defn role-eq? [role] (fn [deps] (= role (:role deps))))
 (defn slug [{:keys [router]}] (:slug router))
 (def homepage? (page-eq? "home"))
-
 
 (def app
   {:keechma.subscriptions/batcher rdom/unstable_batchedUpdates,
@@ -43,46 +43,53 @@
        :entitydb                {:keechma.controller/params true
                                  :keechma.controller/type   :keechma/entitydb}
 
-       :person-form             {:keechma.controller/params true}
-       :project-form            #:keechma.controller {:params (fn [{:keys [router]}]
-                                                                  (page-equal? router "projekt"))
-                                                      :deps   [:router]}
-
-       :persons                 #:keechma.controller {:params (fn [{:keys [router]}]
-                                                                  (or (page-equal? router "osoba")
-                                                                      (page-equal? router "ulogaosobe")))
-                                                      :deps   [:router :entitydb]}
-
-       :projects                #:keechma.controller {:params (fn [{:keys [router]}]
-                                                                  (or (page-equal? router "projekt")
-                                                                      (page-equal? router "ulogaosobe")))
-                                                      :deps   [:router :entitydb]}
-
+       ;; ROLE
        :roles                   #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (or (page-equal? router "uloga")
                                                                       (page-equal? router "ulogaosobe")))
                                                       :deps   [:router :entitydb]}
-
-       :person-roles            #:keechma.controller {:params (fn [{:keys [router]}]
-                                                                  (page-equal? router "ulogaosobe"))
+       :role-edit-form                   #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (or (page-equal? router "uloga")
+                                                                      (page-equal? router "ulogaosobe")))
+                                                      :deps   [:router :entitydb]}
+       :role-form                   #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (or (page-equal? router "uloga")
+                                                                      (page-equal? router "ulogaosobe")))
                                                       :deps   [:router :entitydb]}
 
-       :person-role-form        #:keechma.controller {:params (fn [{:keys [router]}]
-                                                                  (page-equal? router "ulogaosobe"))
+       ;; PERSON
+       :person-form             {:keechma.controller/params true}
+       :persons                 #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (or (page-equal? router "osoba")
+                                                                      (page-equal? router "ulogaosobe")))
                                                       :deps   [:router :entitydb]}
-
        :person-edit-form        #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (contains-page-id? router))
                                                       :deps   [:router :entitydb]}
 
+       ;; PERSON ROLE
+       :person-roles            #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (page-equal? router "ulogaosobe"))
+                                                      :deps   [:router :entitydb]}
+       :person-role-form        #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (page-equal? router "ulogaosobe"))
+                                                      :deps   [:router :entitydb]}
+
+       ;; PROJECT
+       :projects                #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (or (page-equal? router "projekt")
+                                                                      (page-equal? router "ulogaosobe")))
+                                                      :deps   [:router :entitydb]}
+       :project-form            #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                  (page-equal? router "projekt"))
+                                                      :deps   [:router]}
        :project-edit-form       #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (contains-page-id? router))
                                                       :deps   [:router :entitydb]}
 
+       ;; UTILITY
        :person-role-by-personid #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (contains-page-id? router))
                                                       :deps   [:router :entitydb]}
 
-       }
-}
-  )
+       }})

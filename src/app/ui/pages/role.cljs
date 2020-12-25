@@ -6,34 +6,63 @@
             [keechma.next.helix.core :refer [with-keechma dispatch use-sub]]
             [keechma.next.helix.classified :refer [defclassified]]
 
+            [app.ui.components.inputs :refer [wrapped-input]]
             [app.ui.components.header :refer [Header]]))
 
 (defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
-(defnc TableItem [props]
-       (d/tr {:class "border-b border-solid border-gray-700 cursor-pointer hover:bg-gray-900"}
-             (d/td {:class "pl-2 py-2 text-white"} (:naziv props))))
+(defnc RoleListItem [props]
+       (d/div {:class "w-full pt-4 px-4 text-white border-b border-gray-700 border-solid"}
+              (d/form {:on-submit (fn [e]
+                                     (.preventDefault e)
+                                     (dispatch props :role-edit-form :keechma.form/submit))}
+
+                     (d/div {:class "flex flex-row w-full"}
+                         (wrapped-input {:keechma.form/controller :role-edit-form
+                                         :input/type              :textPlain
+                                         :input/attr              :name
+                                         :value                   (:naziv props)
+                                         :placeholder             "Naziv Uloge"})
+
+                         (d/div {:class "flex flex-row justify-between px-10"}
+                                (d/button {:class "block margin-auto mb-4 px-2 rounded-sm border-gray-600
+                                                                          text-md font-medium text-white bg-transparent hover:bg-gray-900
+                                                                          border hover:border-red-600 focus:outline-none"
+                                           :on-click #(dispatch props :role-edit-form :delete nil)} "Obrisi")
+
+                                (d/button {:class "block margin-auto mb-4 px-2 rounded-sm border-gray-600 ml-2
+                                                                          text-md font-medium text-white bg-transparent hover:bg-gray-900
+                                                                          border hover:border-green-600 focus:outline-none"
+                                           :on-click #(dispatch props :role-edit-form :toggle nil)} "Spremi"))))))
 
 (defnc Renderer [props]
-       (let [roles (get-in (use-sub props :roles) [:allUloga])]
-
+       (let [roles (get-in (use-sub props :roles) [:allRole])]
          ($ PageWrapper
-          ($ Header {:naslov "Uloga"})
+          ($ Header {:naslov "Šifrarnik uloga"})
 
-          (d/div {:class "flex h-screen w-full flex-col items-center"}
-                 (d/table {:class "table-fixed w-full top-0"}
-                          (d/thead (d/tr {:class "border-b border-t border-solid border-orange-500 bg-gray-700 text-gray-900"}
-                                         (d/th {:class "w-1/4 px-4 py-2 font-base"} "Naziv uloge")))
-                          (d/tbody
-                            (map #($ TableItem {:naziv (:NazUloge %)
-                                                :key   (:IdUloge %)})
-                                 roles))))
+          (d/div {:class "flex w-full flex-col items-center"}
+                (map #($ RoleListItem {:naziv (:Name %)
+                                    :key   (:id %)})
+                     roles))
 
-          (d/div {:class "flex justify-end py-8 px-8 absolute bottom-0 w-full"}
-                 (d/button {:class "rounded-full bg-orange-600 text-white h-20 w-20 justify-center items-center text-4xl font-thin"
-                            :on-click #(dispatch props :person-form :toggle nil)} "+"))
+          (d/div {:class "w-full pt-4 px-4 text-white"}
+                 (d/form {:on-submit (fn [e]
+                                         (.preventDefault e)
+                                         (dispatch props :role-form :keechma.form/submit))}
+
+                         (d/div {:class "flex flex-row w-full"}
+                                (wrapped-input {:keechma.form/controller :role-form
+                                                :input/type              :text
+                                                :input/attr              :name
+                                                :placeholder             "Naziv nove uloge"})
+
+                                (d/div {:class "flex flex-row justify-between px-10"}
+                                       (d/button {:class "block margin-auto mb-4 px-2 rounded-sm border-gray-600
+                                                                        text-md font-medium text-white bg-transparent hover:bg-gray-900
+                                                                        border hover:border-green-600 focus:outline-none"
+                                                  :on-click #(dispatch props :role-edit-form :toggle nil)} "Spremi"))
 
 
-          )))
+                                ))))))
 
 (def Role (with-keechma Renderer))
