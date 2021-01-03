@@ -12,14 +12,12 @@
 (def pipelines
   {:toggle                   (pipeline! [_ {:keys [state*]}]
                                         (pp/swap! state* update :is-form-open? not))
-   :on-form-open             (pipeline! [value {:keys [state*]}]
-                                        (if value
-                                          (println "Vrijednost valuea: " value)
-                                          (println "Nije predan value")))
-   :keechma.form/submit-data (pipeline! [value ctrl]
-                                        #_(m! [:login [:login :token]] {:input value})
-                                        #_(ctrl/broadcast ctrl :anon/login value)
-                                        (router/redirect! ctrl :router {:page "osoba"}))})
+   :keechma.form/submit-data (pipeline! [value {:keys [state*] :as ctrl}]
+                                        (m! [:create-person [:createPerson]] {:firstName (:firstName   value)
+                                                                              :lastName  (:lastName    value)
+                                                                              :personalId (:personalId value)})
+                                        (pp/swap! state* update :is-form-open? not)
+                                        (router/redirect! ctrl :router {:page ""}))})
 
 
 (defmethod ctrl/start :person-form [_ state _ _]
@@ -28,5 +26,6 @@
 (defmethod ctrl/prep :person-form [ctrl]
   (pipelines/register ctrl
                       (form/wrap pipelines
-                                 (v/to-validator {:ime     [:not-empty]
-                                                  :prezime [:not-empty]}))))
+                                 (v/to-validator {:firstName  [:not-empty]
+                                                  :lastName   [:not-empty]
+                                                  :personalId [:not-empty]}))))

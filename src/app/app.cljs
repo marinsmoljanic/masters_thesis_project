@@ -9,6 +9,8 @@
             [app.controllers.forms.project-edit]
             [app.controllers.forms.role-edit]
 
+            [keechma.next.toolbox.logging :as l]
+
             [keechma.next.controllers.router]
             [keechma.next.controllers.entitydb]
             [keechma.next.controllers.dataloader]
@@ -48,11 +50,18 @@
                                                                   (or (page-equal? router "uloga")
                                                                       (page-equal? router "ulogaosobe")))
                                                       :deps   [:router :entitydb]}
-       :role-edit-form                   #:keechma.controller {:params (fn [{:keys [router]}]
-                                                                  (or (page-equal? router "uloga")
-                                                                      (page-equal? router "ulogaosobe")))
-                                                      :deps   [:router :entitydb]}
-       :role-form                   #:keechma.controller {:params (fn [{:keys [router]}]
+
+       [:role-edit-form]        {:keechma.controller.factory/produce
+                                              (fn [{:keys [roles]}]
+                                                  (let [roles (:allRole roles)]
+                                                      (->> (map (fn [role]
+                                                                  [(js/parseInt (:id role)) {:keechma.controller/params (:id role)}])
+                                                                roles)
+                                                           (into {})
+                                                           (l/pp))))
+                                 :keechma.controller/deps [:roles]}
+
+       :role-form               #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (or (page-equal? router "uloga")
                                                                       (page-equal? router "ulogaosobe")))
                                                       :deps   [:router :entitydb]}

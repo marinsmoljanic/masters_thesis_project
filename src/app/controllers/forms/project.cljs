@@ -11,12 +11,15 @@
 
 (def pipelines
   {:toggle                   (pipeline! [_ {:keys [state*]}]
-                                        (println "Came here")
                                         (pp/swap! state* update :is-project-form-open? not))
-   :keechma.form/submit-data (pipeline! [value ctrl]
-                                        #_(m! [:login [:login :token]] {:input value})
-                                        #_(ctrl/broadcast ctrl :anon/login value)
-                                        (router/redirect! ctrl :router {:page "osoba"}))})
+   :keechma.form/submit-data (pipeline! [value {:keys [state*] :as ctrl}]
+                                        (println "OPAAAAA_________________________________-")
+                                        (m! [:create-project [:createProject]] {:name        (:name value)
+                                                                               :description (:description value)
+                                                                               :startDate   (:startDate value)
+                                                                               :endDate     (:endDate value)})
+                                        (pp/swap! state* update :is-project-form-open? not)
+                                        (router/redirect! ctrl :router {:page ""}))})
 
 (defmethod ctrl/start :project-form [_ state _ _]
            {:is-project-form-open? nil})
@@ -26,5 +29,5 @@
                                (form/wrap pipelines
                                           (v/to-validator {:name     [:not-empty]
                                                            :description [:not-empty]
-                                                           :startdate  [:not-empty]
-                                                           :enddate    [:not-empty]}))))
+                                                           :startDate  [:not-empty]
+                                                           :endDate    [:not-empty]}))))

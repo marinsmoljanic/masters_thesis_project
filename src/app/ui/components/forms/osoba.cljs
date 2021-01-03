@@ -25,24 +25,22 @@
                       (d/p {:class "text-sm text-grayLight text-left w-full mt-6"} "Ime osobe")
                       (wrapped-input {:keechma.form/controller :person-form
                                       :input/type              :text
-                                      :input/attr              :name
+                                      :input/attr              :firstName
                                       :placeholder             "Ime"})
 
                       (d/p {:class "text-sm text-grayLight text-left w-full mt-6"} "Prezime osobe")
                       (wrapped-input {:keechma.form/controller :person-form
                                       :input/type              :text
-                                      :input/attr              :surname
+                                      :input/attr              :lastName
                                       :placeholder             "Prezime"})
 
                       (d/p {:class "text-sm text-grayLight text-left w-full mt-6"} "OIB")
                       (wrapped-input {:keechma.form/controller :person-form
                                       :input/type              :text
-                                      :input/attr              :surname
+                                      :input/attr              :personalId
                                       :placeholder             "OIB"})
 
-                      (d/button {:class "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
-                                             text-md font-medium text-white bg-transparent hover:bg-gray-700"
-                                 :on-click #(dispatch props :person-form :toggle nil)} "Spremi")
-                     )))
+                      (d/button {:class "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm text-md font-medium text-white bg-transparent hover:bg-gray-700
+                                         md:py-4 md:mt-8"} "Spremi"))))
 
 (def PersonForm (with-keechma Renderer))

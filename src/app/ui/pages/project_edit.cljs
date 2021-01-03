@@ -8,7 +8,6 @@
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]
 
             [app.ui.components.inputs :refer [wrapped-input]]
-
             [app.ui.components.header :refer [Header]]))
 
 (defclassified PageWrapper :div "flex flex-col h-full w-screen bg-gray-800 relative")
@@ -20,7 +19,8 @@
                                                          :id (:projectId props)})} (:projectName props))
              (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"
                     :on-click #(redirect! props :router {:page "roleedit"
-                                                         :id (:roleId props)})} (:roleName props))))
+                                                         :id (:roleId props)})} (:roleName props))
+             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"} (:roleName props))))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -50,24 +50,26 @@
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Datum pocetka")
                               (wrapped-input {:keechma.form/controller :project-edit-form
                                               :input/type              :text
-                                              :input/attr              :startdate
+                                              :input/attr              :startDate
                                               :placeholder             "Datum pocetka"})
 
                               (d/div {:class "max-width-full h-6 transparent"})
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Datum zavrsetka")
                               (wrapped-input {:keechma.form/controller :project-edit-form
                                               :input/type              :text
-                                              :input/attr              :ednddate
+                                              :input/attr              :endDate
                                               :placeholder             "Datum zavrsetka"})
 
                               (d/div {:class "flex flex-row justify-between px-10 pt-4"}
                                      (d/button {:class "block margin-auto border w-56 px-4 py-3 rounded-sm
                                                         text-md font-medium text-white bg-transparent hover:bg-gray-700 hover:border-red-600"
-                                                :on-click #(dispatch props :project-edit-form :delete nil)} "Obrisi")
+                                                :type  "button"
+                                                :on-click #(dispatch props :project-edit-form :delete-project nil)}
+                                               "Obrisi")
 
                                      (d/button {:class "block margin-auto border w-56 px-4 py-3 rounded-sm
-                                                        text-md font-medium text-white bg-transparent hover:bg-gray-700"
-                                                :on-click #(dispatch props :project-edit-form :toggle nil)} "Spremi")))
+                                                        text-md font-medium text-white bg-transparent hover:bg-gray-700"}
+                                               "Spremi")))
 
 
                       (d/div {:class "w-full mt-12  flex flex-row border-t border-dotted border-gray-600"}
@@ -84,7 +86,8 @@
                                (d/thead (d/tr {:class "border-b border-t border-solid border-orange-500 bg-gray-700 text-gray-900"
                                                }
                                               (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-solid border-orange-500"} "Osoba")
-                                              (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")))
+                                              (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")
+                                              (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                (d/tbody
                                  #_($ TableItem {:projectId     (:ProjectCode person-role)
                                                :projectName   "Mock PROJECT name"

@@ -37,21 +37,20 @@
                       (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Datum pocetka")
                       (wrapped-input {:keechma.form/controller :project-form
                                       :input/type              :text
-                                      :input/attr              :startdate
+                                      :input/attr              :startDate
                                       :placeholder             "Datum pocetka"})
 
                       (d/div {:class "max-width-full h-6 transparent"})
                       (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Datum zavrsetka")
                       (wrapped-input {:keechma.form/controller :project-form
                                       :input/type              :text
-                                      :input/attr              :ednddate
+                                      :input/attr              :endDate
                                       :placeholder             "Datum zavrsetka"})
 
                       #_(when error ($ RenderErrors {:error error}))
 
                       (d/button {:class "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
-                                             text-md font-medium text-white bg-transparent hover:bg-gray-700"
-                                 :on-click #(dispatch props :project-form :toggle nil)} "Spremi")
+                                         text-md font-medium text-white bg-transparent hover:bg-gray-700"} "Spremi")
                       )))
 
 (def ProjectForm (with-keechma Renderer))

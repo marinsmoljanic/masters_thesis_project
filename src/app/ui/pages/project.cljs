@@ -15,16 +15,23 @@
 (defnc TableItem [props]
        (d/tr {:class "border-b border-solid border-gray-700 cursor-pointer hover:bg-gray-900"
               :on-click #(redirect! props :router {:page "projectedit"
-                                                   :id (:id props)})}
+                                                   :id (:id props)
+                                                   :description (:description props)
+                                                   :name (:name props)
+                                                   :startDate (:startDate props)
+                                                   :endDate (:endDate props)})}
              (d/td {:class "pl-2 py-2 text-white"} (:name props))
-             (d/td {:class "pl-2 py-2 text-white"} (:description props))))
+             (d/td {:class "pl-2 py-2 text-white"} (:description props))
+             (d/td {:class "pl-2 py-2 text-white"} (:startDate props))
+             (d/td {:class "pl-2 py-2 text-white"} (:endDate props))
+             ))
 
 (defnc Renderer [props]
        (let [is-project-form-open? (get-in (use-sub props :project-form) [:is-project-form-open?])
              projects              (get-in (use-sub props :projects) [:allProject])]
          ($ PageWrapper
             (if is-project-form-open?
-              ($ HeaderCreateForm {:naslov "Popis projekata"})
+              ($ HeaderCreateForm {:naslov "Unesite podatke novog projekata"})
               ($ Header {:naslov "Popis projekata"}))
 
             (if is-project-form-open?
@@ -34,10 +41,14 @@
                    (d/table {:class "table-fixed w-full top-0"}
                             (d/thead (d/tr {:class "border-b border-t border-solid border-orange-500 bg-gray-700 text-gray-900"}
                                            (d/th {:class "w-1/3 px-4 py-2 font-base"} "Naziv projekta")
-                                           (d/th {:class "w-1/3 px-4 py-2 font-base border-l border-solid border-orange-500"} "Opis projekta")))
+                                           (d/th {:class "w-1/3 px-4 py-2 font-base border-l border-solid border-orange-500"} "Opis projekta")
+                                           (d/th {:class "w-1/3 px-4 py-2 font-base border-l border-solid border-orange-500"} "Datum pocetka")
+                                           (d/th {:class "w-1/3 px-4 py-2 font-base border-l border-solid border-orange-500"} "Datum zavrsetka")))
                             (d/tbody
                               (map #($ TableItem {:name        (:Name %)
                                                   :description (:Description %)
+                                                  :startDate   (:StartDate %)
+                                                  :endDate     (:EndDate %)
                                                   :id          (:id %)
                                                   :key         (:id %)
                                                   &            props})

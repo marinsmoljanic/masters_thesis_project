@@ -15,7 +15,9 @@
        (d/div {:class "w-full pt-4 px-4 text-white border-b border-gray-700 border-solid"}
               (d/form {:on-submit (fn [e]
                                      (.preventDefault e)
-                                     (dispatch props :role-edit-form :keechma.form/submit))}
+                                      (println "-------------------------------")
+                                      #_(dispatch props :role-edit-form :click)
+                                      (dispatch props :role-edit-form :keechma.form/submit))}
 
                      (d/div {:class "flex flex-row w-full"}
                          (wrapped-input {:keechma.form/controller :role-edit-form
@@ -28,12 +30,14 @@
                                 (d/button {:class "block margin-auto mb-4 px-2 rounded-sm border-gray-600
                                                                           text-md font-medium text-white bg-transparent hover:bg-gray-900
                                                                           border hover:border-red-600 focus:outline-none"
-                                           :on-click #(dispatch props :role-edit-form :delete nil)} "Obrisi")
+                                           :type "button"
+                                           :on-click #(println "KLIK NA BRISANJE")} "Obrisi")
 
                                 (d/button {:class "block margin-auto mb-4 px-2 rounded-sm border-gray-600 ml-2
                                                                           text-md font-medium text-white bg-transparent hover:bg-gray-900
-                                                                          border hover:border-green-600 focus:outline-none"
-                                           :on-click #(dispatch props :role-edit-form :toggle nil)} "Spremi"))))))
+                                                                          border hover:border-green-600 focus:outline-none"} "Spremi")
+
+                          )))))
 
 (defnc Renderer [props]
        (let [roles (get-in (use-sub props :roles) [:allRole])]
@@ -41,28 +45,34 @@
           ($ Header {:naslov "Šifrarnik uloga"})
 
           (d/div {:class "flex w-full flex-col items-center"}
-                (map #($ RoleListItem {:naziv (:Name %)
-                                    :key   (:id %)})
+                (map (fn [role] ($ RoleListItem {:naziv (:Name role)
+                                                 :id    (:id role)
+                                                 :key   (:id role)}))
                      roles))
 
           (d/div {:class "w-full pt-4 px-4 text-white"}
                  (d/form {:on-submit (fn [e]
                                          (.preventDefault e)
+                                         (println "Prije dispatcha na kontroler")
+                                         #_(dispatch props :role-edit-form :click nil)
                                          (dispatch props :role-form :keechma.form/submit))}
 
                          (d/div {:class "flex flex-row w-full"}
                                 (wrapped-input {:keechma.form/controller :role-form
-                                                :input/type              :text
+                                                :input/type              :textPlain
                                                 :input/attr              :name
                                                 :placeholder             "Naziv nove uloge"})
 
                                 (d/div {:class "flex flex-row justify-between px-10"}
                                        (d/button {:class "block margin-auto mb-4 px-2 rounded-sm border-gray-600
                                                                         text-md font-medium text-white bg-transparent hover:bg-gray-900
-                                                                        border hover:border-green-600 focus:outline-none"
-                                                  :on-click #(dispatch props :role-edit-form :toggle nil)} "Spremi"))
+                                                                        border hover:border-green-600 focus:outline-none"} "Spremi"))
 
 
-                                ))))))
+                                )))
+
+
+
+            )))
 
 (def Role (with-keechma Renderer))

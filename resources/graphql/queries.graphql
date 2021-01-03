@@ -6,7 +6,6 @@ query Persons{
         PersonalId
     }
 }
-
 query Projects{
     allProject{
         id
@@ -16,7 +15,6 @@ query Projects{
         EndDate
     }
 }
-
 query Roles{
     allRole{
         id
@@ -24,13 +22,113 @@ query Roles{
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+mutation CreatePerson($lastName: String!, $firstName: String!, $personalId: String!){
+    createPerson(LastName: $lastName FirstName: $firstName PersonalId: $personalId) {
+        person{
+            id
+            FirstName
+            LastName
+        }
+    }
+}
+mutation CreateProject($name: String!, $description: String!, $startDate: String!, $endDate: String!){
+    createProject(Name: $name, Description: $description, StartDate: $startDate, EndDate: $endDate) {
+        project{
+            id
+            Name
+            Description
+            StartDate
+            EndDate
+        }
+    }
+}
+mutation CreateRole($name: String!){
+    createRole(Name: $name) {
+        role{
+            Name
+        }
+    }
+}
+
+
+
+
+
+
+
+
+mutation UpdatePerson($id: ID, $lastName: String!, $firstName: String!){
+    updatePerson(id: $id, LastName: $lastName, FirstName: $firstName) {
+        person{
+            id
+            FirstName
+            LastName
+            PersonalId
+        }
+    }
+}
+mutation UpdateProject($id: ID, $name: String!, $description: String!, $startDate: String!, $endDate: String!){
+    updateProject(id: $id, Name: $name, Description: $description, StartDate: $startDate, EndDate: $endDate) {
+        project{
+            id
+            Name
+            Description
+            StartDate
+            EndDate
+        }
+    }
+}
+
+
+
+
+
+
+
+
+mutation DeletePerson($id: ID){
+    deletePerson(id: $id) {
+        person{
+            FirstName
+            LastName
+        }
+    }
+}
+mutation DeleteProject($id: ID){
+    deleteProject(id: $id) {
+        project{
+            Description
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 query PersonById($id: String!) {
     personById(id: $id) {
         LastName
         FirstName
     }
 }
-
 query PersonRoleByPersonId($personid: String!) {
     personRoleByPersonid(personid: $personid) {
         ProjectCode
@@ -39,13 +137,3 @@ query PersonRoleByPersonId($personid: String!) {
         AssignmentDate
     }
 }
-
-mutation CreatePerson($personid: String!) {
-    createPerson(personid: $personid) {
-        ProjectCode
-        PersonId
-        RoleId
-        AssignmentDate
-    }
-}
-

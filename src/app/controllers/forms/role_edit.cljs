@@ -14,6 +14,12 @@
   {:load-data (pipeline! [_ {:keys [deps-state*]}]
                           (let [roles (edb/get-named (:entitydb @deps-state*) :roles-data)]
                                      {:name (edb/get-named (:entitydb @deps-state*) :roles-data)}))
+   :delete-entity (pipeline! [_ {:keys [deps-state*]}]
+                             (let [roles (edb/get-named (:entitydb @deps-state*) :roles-data)]
+                                  {:name (edb/get-named (:entitydb @deps-state*) :roles-data)}))
+
+   :click (pipeline! [_ {:keys [deps-state*]}]
+                             (println "CLICK PIPLANE KEY"))
 
    :keechma.form/submit-data (pipeline! [value {:keys [deps-state*]}]
                                     (println "VALUE from controler: " value)

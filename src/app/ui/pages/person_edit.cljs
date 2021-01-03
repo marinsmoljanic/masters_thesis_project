@@ -11,16 +11,17 @@
 
             [app.ui.components.header :refer [Header]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800 relative")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
 (defnc TableItem [props]
-       (d/tr {:class "border-b border-solid border-gray-700 cursor-pointer"}
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"
+       (d/tr {:class "border-b border-solid border-gray-700"}
+             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900 cursor-pointer"
                     :on-click #(redirect! props :router {:page "projectedit"
                                                          :id (:projectId props)})} (:projectName props))
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"
+             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900 cursor-pointer"
                     :on-click #(redirect! props :router {:page "roleedit"
-                                                         :id (:roleId props)})} (:roleName props))))
+                                                         :id (:roleId props)})} (:roleName props))
+             (d/td {:class "pl-2 py-2 text-white"} (:assignmentDate props))))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -53,12 +54,12 @@
                                                    (d/button {:class "block margin-auto  border w-56 px-4 py-3 rounded-sm
                                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700 hover:border-red-600
                                                                       focus:outline-none active:bg-gray-900"
-                                                              :on-click #(dispatch props :person-edit-form :delete nil)} "Obrisi")
+                                                              :type  "button"
+                                                              :on-click #(dispatch props :person-edit-form :delete-person nil)} "Obrisi")
 
                                                    (d/button {:class "block margin-auto border w-56 px-4 py-3 rounded-sm
                                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700
-                                                                      active:bg-gray-900 focus:outline-none"
-                                                              :on-click #(dispatch props :person-edit-form :toggle nil)} "Spremi")))
+                                                                      active:bg-gray-900 focus:outline-none"} "Spremi")))
 
                                     (d/div {:class "w-full mt-12  flex flex-row border-t border-dotted border-gray-600"}
                                            (d/div {:class "flex justify-start text-normal font-thin text-gray-400 pt-4 pb-2 w-1/2 "}
@@ -73,11 +74,13 @@
                                     (d/table {:class "table-fixed w-full"}
                                              (d/thead (d/tr {:class "border-b border-t border-solid border-orange-500 bg-gray-700 text-gray-900"}
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-solid border-orange-500"} "Projekt")
-                                                            (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")))
+                                                            (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")
+                                                            (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                              (d/tbody
                                                ($ TableItem {:projectId     (:ProjectCode person-role)
                                                             :projectName   "Mock PROJECT name"
                                                             :roleId        (:RoleId person-role)
+                                                            :assignmentDate "MOCK date"
                                                             :roleName      "Mock ROLE name"
                                                             :key     "FAKE key"
                                                             :id      "FAKE id"
