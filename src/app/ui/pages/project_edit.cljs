@@ -27,7 +27,8 @@
               error))
 
 (defnc Renderer [props]
-       (let [_ (println "PRINT KAO PRINT")]
+       (let [_ (println "PRINT KAO PRINT")
+             ]
             ($ PageWrapper
                ($ Header {:naslov "Uredi podatke projekta"})
                (d/div {:class "min-w-full mt-8 px-4 text-white"}

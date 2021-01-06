@@ -21,6 +21,10 @@
   (pipelines/register ctrl pipelines))
 
 (defmethod ctrl/derive-state :roles [_ state {:keys [entitydb]}]
-  (edb/get-named entitydb :roles-data))
+   (let [
+         ;; _ (println "Some data derive state: " (edb/get-named entitydb :roles-data))
+         _ (println "")
+         ]
+         (edb/get-named entitydb :roles-data)))
 
 

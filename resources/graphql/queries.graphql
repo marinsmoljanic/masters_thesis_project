@@ -21,6 +21,15 @@ query Roles{
         Name
     }
 }
+query PersonRoles{
+    allPersonRole{
+        id
+        ProjectCode
+        PersonId
+        RoleId
+        AssignmentDate
+    }
+}
 
 
 
@@ -56,6 +65,15 @@ mutation CreateRole($name: String!){
     createRole(Name: $name) {
         role{
             Name
+        }
+    }
+}
+mutation CreatePersonRole($project: String!, $role: String!, $person: String!, $date: String!){
+    createPersonRole(ProjectCode: $project RoleId: $role PersonId: $person AssignmentDate: $date) {
+        personrole{
+            ProjectCode
+            RoleId
+            PersonId
         }
     }
 }

@@ -8,6 +8,7 @@
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]
 
             [app.ui.components.inputs :refer [wrapped-input]]
+            [keechma.next.toolbox.logging :as l]
 
             [app.ui.components.header :refer [Header]]))
 
@@ -27,9 +28,20 @@
        (d/div {:class "text-redDark text-xs pt-2"}
               error))
 
+(defn extract-name [person-role-id roles]
+      (l/pp (get-in (first (filterv (fn [role]
+                                        (= (:id role) person-role-id))
+                                    roles)) [:Name])))
+
 (defnc Renderer [props]
-       (let [person-role (get-in (use-sub props :person-role-by-personid) [:personRoleByPersonid])
-             _ (println "Person Role From Component: " person-role)]
+       (let [
+             ;; person-roles (get-in (use-sub props :person-role-by-personid) [:personRoleByPersonid])
+             roles (get-in (use-sub props :roles) [:allRole])
+             projects (get-in (use-sub props :projects) [:allProject])
+             ;; extracted-role-name (extract-name (:RoleId person-roles) roles)
+
+             ;;_ (l/pp person-roles)
+           ]
                ($ PageWrapper
                       ($ Header {:naslov "Uredi podatke osobe"})
                              (d/div {:class "min-w-full min-h-screen mt-8 px-4 text-white"}
@@ -77,7 +89,7 @@
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                              (d/tbody
-                                               ($ TableItem {:projectId     (:ProjectCode person-role)
+                                               #_($ TableItem {:projectId     (:ProjectCode person-role)
                                                             :projectName   "Mock PROJECT name"
                                                             :roleId        (:RoleId person-role)
                                                             :assignmentDate "MOCK date"
@@ -86,13 +98,13 @@
                                                             :id      "FAKE id"
                                                             &        props})
                                                #_(map (fn [p]
-                                                        (println "------------------------>" p)
-                                                        ($ TableItem {:FirstName     (:FirstName p)
+                                                        (= 1 1)
+                                                        #_($ TableItem {:FirstName     (:FirstName p)
                                                                       :LastName (:LastName p)
                                                                       :PersonalId     (:PersonalId p)
                                                                       :key     (:id p)
                                                                       :id      (:id p)
                                                                       &        props}))
-                                                    persons)))))))
+                                                    person-roles-enriched)))))))
 
 (def PersonEdit (with-keechma Renderer))
