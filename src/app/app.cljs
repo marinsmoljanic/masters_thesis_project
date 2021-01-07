@@ -112,6 +112,6 @@
        ;; UTILITY
        :person-role-by-personid #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (contains-page-id? router))
-                                                      :deps   [:router :entitydb :roles]}
+                                                      :deps   [:router :entitydb :roles :projects]}
 
        }})

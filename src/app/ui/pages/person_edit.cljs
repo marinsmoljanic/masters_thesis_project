@@ -14,34 +14,23 @@
 
 (defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
-(defnc TableItem [props]
-       (d/tr {:class "border-b border-solid border-gray-700"}
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900 cursor-pointer"
-                    :on-click #(redirect! props :router {:page "projectedit"
-                                                         :id (:projectId props)})} (:projectName props))
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900 cursor-pointer"
-                    :on-click #(redirect! props :router {:page "roleedit"
-                                                         :id (:roleId props)})} (:roleName props))
-             (d/td {:class "pl-2 py-2 text-white"} (:assignmentDate props))))
+(defnc TableItem [{:keys [projectId projectName roleId assignmentDate roleName id] :as props}]
+       (d/tr {:class "border-b border-solid border-gray-700  hover:bg-gray-900 cursor-pointer"
+              ;; ONCLICK promijeniti na zaduzenje-edit
+              :on-click #(redirect! props :router {:page "projectedit"
+                                                   :id (:projectId props)})}
+             (d/td {:class "pl-2 py-2 text-white"} projectName)
+             (d/td {:class "pl-2 py-2 text-white"} roleName)
+             (d/td {:class "pl-2 py-2 text-white"} assignmentDate)))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
               error))
 
-(defn extract-name [person-role-id roles]
-      (l/pp (get-in (first (filterv (fn [role]
-                                        (= (:id role) person-role-id))
-                                    roles)) [:Name])))
-
 (defnc Renderer [props]
-       (let [
-             ;; person-roles (get-in (use-sub props :person-role-by-personid) [:personRoleByPersonid])
+       (let [person-roles (use-sub props :person-role-by-personid)
              roles (get-in (use-sub props :roles) [:allRole])
-             projects (get-in (use-sub props :projects) [:allProject])
-             ;; extracted-role-name (extract-name (:RoleId person-roles) roles)
-
-             ;;_ (l/pp person-roles)
-           ]
+             projects (get-in (use-sub props :projects) [:allProject])]
                ($ PageWrapper
                       ($ Header {:naslov "Uredi podatke osobe"})
                              (d/div {:class "min-w-full min-h-screen mt-8 px-4 text-white"}
@@ -89,22 +78,15 @@
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                              (d/tbody
-                                               #_($ TableItem {:projectId     (:ProjectCode person-role)
-                                                            :projectName   "Mock PROJECT name"
-                                                            :roleId        (:RoleId person-role)
-                                                            :assignmentDate "MOCK date"
-                                                            :roleName      "Mock ROLE name"
-                                                            :key     "FAKE key"
-                                                            :id      "FAKE id"
-                                                            &        props})
-                                               #_(map (fn [p]
-                                                        (= 1 1)
-                                                        #_($ TableItem {:FirstName     (:FirstName p)
-                                                                      :LastName (:LastName p)
-                                                                      :PersonalId     (:PersonalId p)
-                                                                      :key     (:id p)
-                                                                      :id      (:id p)
+                                               (map (fn [person-role]
+                                                        ($ TableItem {:projectId       (:ProjectCode person-role)
+                                                                      :projectName    (:projectName person-role)
+                                                                      :roleId         (:RoleId person-role)
+                                                                      :assignmentDate (:AssignmentDate person-role)
+                                                                      :roleName       (:roleName person-role)
+                                                                      :key            (:id person-role)
+                                                                      :id             (:id person-role)
                                                                       &        props}))
-                                                    person-roles-enriched)))))))
+                                                    person-roles)))))))
 
 (def PersonEdit (with-keechma Renderer))

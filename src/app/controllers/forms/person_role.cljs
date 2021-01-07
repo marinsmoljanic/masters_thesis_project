@@ -11,12 +11,15 @@
 
 (def pipelines
   {:keechma.form/submit-data (pipeline! [value ctrl]
-                                        (println "Submit value: " value)
-                                        (m! [:create-person-role [:createPersonRole]] {:project  (:project value)
+                                        (println "Submit value ----> " value)
+
+                                        #_(m! [:create-person-role [:createPersonRole]] {:project  (:project value)
                                                                                        :role     (:role value)
                                                                                        :person   (:person value)
                                                                                        :date     (:date value)})
-                                        (router/redirect! ctrl :router {:page "osoba"}))})
+                                        #_(router/redirect! ctrl :router {:page "osoba"})
+
+                                        )})
 
 (defmethod ctrl/start :person-role-form [_ state _ _]
            {:is-form-open? nil})

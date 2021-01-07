@@ -135,6 +135,36 @@
                       &          element-props}))))
 (def PlainTextInput (with-keechma TextInputRenderer))
 
+;; DATE
+(defnc DateInputRenderer [{:keechma.form/keys [controller]
+                          :input/keys        [attr]
+                          :as                props}]
+       (let [element-props (get-element-props {} props)
+             value-getter (hooks/use-callback [attr] #(form/get-data-in % attr))
+             value (use-meta-sub props controller value-getter)]
+            (d/div {:class "relative w-full flex flex-col justify-start"}
+                   (when (:label props)
+                         (d/label {:class "text-sm text-grayLight text-grayLight w-full mb-3"
+                                   :for (:label props)}
+                                  (:label props)
+                                  (d/div {:class "mt-2 w-6 rounded-md  h-6 bg-white flex justify-center items-center"}
+                                         (when value
+                                               (d/i {:class "fal fa-check text-2xl text-green"})))))
+                   (d/input
+                     {:type      "date"
+                      :id        (:label props)
+                      :name      "my-date"
+                      :on-change #(dispatch props
+                                            controller
+                                            :keechma.form.on/change
+                                            {:value (.. % -target -value) :attr attr})
+                      #_(dispatch props
+                                            controller
+                                            :keechma.form.on/change
+                                            {:value (.. % -target -checked) :attr attr})
+                      &          element-props}))))
+(def DateInput (with-keechma DateInputRenderer))
+
 ;; TEXT-AREA
 (defnc TextAreaRenderer [{:keechma.form/keys [controller]
                           :input/keys        [attr]
@@ -189,7 +219,7 @@
              value-getter (hooks/use-callback [attr] #(form/get-data-in % attr))
              value (use-meta-sub props controller value-getter)]
             (let [{:keys [options optgroups placeholder]} props]
-                 (d/div {:class "relative w-full text-gray2 pb-3 border-b-2 border-gray"}
+                 (d/div {:class "relative w-full text-gray2 pb-3"}
                         (when (:prepend/icon props)
                               (d/div {:class "absolute top-0 right-0 flex h-full items-center pb-1"}
                                      (d/div {:class "w-5 h-5 mb-2"
@@ -234,6 +264,7 @@
 (defmulti input (fn [props] (:input/type props)))
 (defmethod input :text      [props] ($ TextInput {& props}))
 (defmethod input :textPlain [props] ($ PlainTextInput {& props}))
+(defmethod input :date [props] ($ DateInput {& props}))
 (defmethod input :password  [props] ($ PasswordInput {& props}))
 (defmethod input :search    [props] ($ TextInput {& props}))
 (defmethod input :textarea  [props] ($ TextArea {& props}))
@@ -285,8 +316,19 @@
                        (input (assoc props :class "hidden w-6 rounded-md  h-6 pb-3"))
                        ($ Errors {& props})))
 
+(defmethod wrapped-input :date [props]
+           (d/fieldset {:class "margin-auto h-16 w-full input-field-focus transparent"}
+                       (input (assoc props :class "min-w-full pb-3 pt-3 pl-2 outline-none bg-transparent border-b border-solid
+                                                   border-orange-400 text-white  hover:bg-gray-700"))
+                       ($ Errors {& props})))
+
 (defmethod wrapped-input :select [props]
            (d/fieldset {:class "form-group w-full px-2 text-md"}
-                       (input (assoc props :class "relative appearance-none bg-transparent border-none w-full py-1 px-2
-                                         leading-tight focus:outline-none text-gray2"))
+                       (input (assoc props :class "relative appearance-none bg-transparent
+                                                   leading-tight focus:outline-none text-gray2
+
+                                                   min-w-full pb-3 pt-3 pl-2 outline-none border-b border-solid border-orange-400
+                                                   focus:border-orange-200 hover:bg-gray-700 focus:bg-gray-900
+
+                                                   "))
                        ($ Errors {& props})))
