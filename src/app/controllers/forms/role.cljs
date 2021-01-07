@@ -11,9 +11,7 @@
 
 (def pipelines
   {:keechma.form/submit-data (pipeline! [value {:keys [deps-state*] :as ctrl}]
-                                        #_(println "VALUE from form: " value)
                                         (m! [:create-role [:createRole]] {:Name (:name value)})
-                                        #_(ctrl/broadcast ctrl :anon/login value)
                                         (router/redirect! ctrl :router {:page ""}))})
 
 (defmethod ctrl/start :role-form [_ state _ _]

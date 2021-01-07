@@ -106,6 +106,14 @@ mutation UpdateProject($id: ID, $name: String!, $description: String!, $startDat
         }
     }
 }
+mutation UpdateRole($id: ID, $name: String!){
+    updateRole(id: $id Name: $name) {
+        role{
+            id
+            Name
+        }
+    }
+}
 
 
 
@@ -126,6 +134,13 @@ mutation DeleteProject($id: ID){
     deleteProject(id: $id) {
         project{
             Description
+        }
+    }
+}
+mutation DeleteRole($id: ID){
+    deleteRole(id: $id) {
+        role{
+            Name
         }
     }
 }

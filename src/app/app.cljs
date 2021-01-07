@@ -16,10 +16,6 @@
             [keechma.next.controllers.dataloader]
             [keechma.next.controllers.subscription]
 
-
-            [app.controllers.some-form]
-            [app.controllers.some-data]
-
             [app.controllers.datasources.role]
             [app.controllers.datasources.person]
             [app.controllers.datasources.project]
@@ -58,20 +54,10 @@
 
        [:role-edit-form]        {:keechma.controller.factory/produce
                                               (fn [{:keys [roles]}]
-                                                  (let [roles (:allRole roles)]
-                                                      (->> (map (fn [role]
-                                                                  [(js/parseInt (:id role)) {:keechma.controller/params role}])
-                                                                roles)
-                                                           (into {}))))
+                                                    (->> (map (fn [role] [(:id role) {:keechma.controller/params role}])
+                                                              roles)
+                                                         (into {})))
                                  :keechma.controller/deps [:roles]}
-
-       :some-data   {:keechma.controller/params true}
-       [:some-form] {:keechma.controller.factory/produce (fn [{:keys [some-data]}]
-                                                             (->> some-data
-                                                                  (map (fn [data] [(:id data) {:keechma.controller/params data}]))
-                                                                  (into {})))
-                     :keechma.controller/deps            [:some-data]}
-
 
        :role-form               #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (or (page-equal? router "uloga")

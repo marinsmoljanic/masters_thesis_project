@@ -10,8 +10,8 @@
 
 (def load-roles
   (-> (pipeline! [value {:keys [deps-state*] :as ctrl}]
-                 (q! [:roles []] {})
-                 (edb/insert-named! ctrl :entitydb :rolestype :roles-data value))
+                 (q! [:roles [:allRole]] {})
+                 (edb/insert-collection! ctrl :entitydb :role :role/list value))
       (pp/set-queue :load-roles)))
 
 (def pipelines
@@ -21,10 +21,5 @@
   (pipelines/register ctrl pipelines))
 
 (defmethod ctrl/derive-state :roles [_ state {:keys [entitydb]}]
-   (let [
-         ;; _ (println "Some data derive state: " (edb/get-named entitydb :roles-data))
-         _ (println "")
-         ]
-         (edb/get-named entitydb :roles-data)))
-
-
+   (let [roles (edb/get-collection entitydb :role/list)]
+         (edb/get-collection entitydb :role/list)))

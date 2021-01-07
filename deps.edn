@@ -13,6 +13,7 @@
    :sha "038e96acb8dc6a3c63dccb36ef429b50e196ffc6"},
   lilactown/helix #:mvn{:version "0.0.13"},
   medley #:mvn{:version "1.2.0"},
+  tick {:mvn/version "0.4.24-alpha"},
   nubank/workspaces #:mvn{:version "1.0.15"},
   org.clojure/clojure #:mvn{:version "1.10.1"},
   org.clojure/clojurescript #:mvn{:version "1.10.764"},
