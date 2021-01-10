@@ -6,29 +6,41 @@
             [keechma.next.helix.core :refer [with-keechma dispatch]]
             [keechma.next.helix.classified :refer [defclassified]]
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]
-
+            [keechma.next.toolbox.logging :as l]
+            [tick.alpha.api :as t]
             [app.ui.components.inputs :refer [wrapped-input]]
             [app.ui.components.header :refer [Header]]))
 
-(defclassified PageWrapper :div "flex flex-col h-full w-screen bg-gray-800 relative")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
-(defnc TableItem [props]
-       (d/tr {:class "border-b border-solid border-gray-700 cursor-pointer"}
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"
-                    :on-click #(redirect! props :router {:page "projectedit"
-                                                         :id (:projectId props)})} (:projectName props))
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"
-                    :on-click #(redirect! props :router {:page "roleedit"
-                                                         :id (:roleId props)})} (:roleName props))
-             (d/td {:class "pl-2 py-2 text-white hover:bg-gray-900"} (:roleName props))))
+(defnc TableItem [{:keys [personId personName roleId assignmentDate roleName project-code project-name person-role-id] :as props}]
+       (d/tr {:class "border-b border-solid border-gray-700  hover:bg-gray-900 cursor-pointer"
+              :on-click #(redirect! props :router {:page            "ulogaosobeurediprojektnobazirano"
+                                                  :project-name    project-name
+                                                  :project-id      project-code
+                                                  :person-name     personName
+                                                  :person-id       personId
+                                                  :assignment-date assignmentDate
+                                                  :role-name       roleName
+                                                  :role-id         roleId})}
+
+             (d/td {:class "pl-2 py-2 text-white"} personName)
+             (d/td {:class "pl-2 py-2 text-white"} roleName)
+             (d/td {:class "pl-2 py-2 text-white"}
+                   (if (= assignmentDate "1609459200000")
+                     (str (t/inst (t/new-duration assignmentDate :millis)))
+                     assignmentDate))))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
               error))
 
 (defnc Renderer [props]
-       (let [_ (println "PRINT KAO PRINT")
-             ]
+       (let [route (use-sub props :router)
+             project-name (:name route)
+             person-roles (use-sub props :person-role-by-projectid)
+             roles (use-sub props :roles)
+             persons (use-sub props :persons)]
             ($ PageWrapper
                ($ Header {:naslov "Uredi podatke projekta"})
                (d/div {:class "min-w-full mt-8 px-4 text-white"}
@@ -90,21 +102,18 @@
                                               (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Uloga")
                                               (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                (d/tbody
-                                 #_($ TableItem {:projectId     (:ProjectCode person-role)
-                                               :projectName   "Mock PROJECT name"
-                                               :roleId        (:RoleId person-role)
-                                               :roleName      "Mock ROLE name"
-                                               :key     "FAKE key"
-                                               :id      "FAKE id"
-                                               &        props})
-                                 #_(map (fn [p]
-                                            (println "------------------------>" p)
-                                            ($ TableItem {:FirstName     (:FirstName p)
-                                                          :LastName (:LastName p)
-                                                          :PersonalId     (:PersonalId p)
-                                                          :key     (:id p)
-                                                          :id      (:id p)
-                                                          &        props}))
-                                        persons)))))))
+                                 (map (fn [person-role]
+                                          ($ TableItem {:personId       (:PersonId person-role)
+                                                        :personName     (:personName person-role)
+                                                        :roleId         (:RoleId person-role)
+                                                        :assignmentDate (:AssignmentDate person-role)
+                                                        :roleName       (:roleName person-role)
+                                                        :project-code   (:ProjectCode person-role)
+                                                        :project-name   project-name
+                                                        :key            (:id person-role)
+                                                        :person-role-id (:id person-role)
+                                                        &        props}))
+                                      person-roles)))))))
+
 
 (def ProjectEdit (with-keechma Renderer))

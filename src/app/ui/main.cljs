@@ -9,6 +9,8 @@
             [app.ui.pages.project :refer [Project]]
             [app.ui.pages.person :refer [Person]]
             [app.ui.pages.person-role :refer [PersonRoleForm]]
+            [app.ui.pages.person-role-edit :refer [PersonRoleEditForm]]
+            [app.ui.pages.person-role-edit-projectbased :refer [PersonRoleEditProjectBasedForm]]
             [app.ui.pages.person-edit :refer [PersonEdit]]
             [app.ui.pages.project-edit :refer [ProjectEdit]]))
 
@@ -20,6 +22,8 @@
       "projekt" ($ Project)
       "uloga" ($ Role)
       "ulogaosobe" ($ PersonRoleForm)
+      "ulogaosobeuredi" ($ PersonRoleEditForm)
+      "ulogaosobeurediprojektnobazirano" ($ PersonRoleEditProjectBasedForm)
       "personedit" ($ PersonEdit)
       "projectedit" ($ ProjectEdit)
 

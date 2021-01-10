@@ -22,7 +22,7 @@
              persons-select-value (map (fn [person]
                                            (assoc persons-map :label (str (:FirstName person) " " (:LastName person)) :value (:id person)))
                                        persons)
-             roles (get-in (use-sub props :roles) [:allRole])
+             roles (use-sub props :roles)
              roles-map {}
              roles-select-value (map (fn [role]
                                            (assoc roles-map :label (:Name role) :value (:id role)))

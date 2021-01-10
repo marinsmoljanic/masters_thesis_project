@@ -28,7 +28,7 @@
 (def load-person-role
   (-> (pipeline! [value {:keys [deps-state*] :as ctrl}]
                  (q! [:person-roles [:allPersonRole]] {})
-                 (let [roles (get-in (:roles @deps-state*) [:allRole])
+                 (let [roles (:roles @deps-state*)
                        projects (get-in (:projects @deps-state*) [:allProject])
                        person-id (str (get-in @deps-state* [:router :id]))
                        person-roles (filter-person-roles-by-personid value person-id)

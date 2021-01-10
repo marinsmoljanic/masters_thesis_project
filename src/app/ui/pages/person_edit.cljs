@@ -9,19 +9,30 @@
 
             [app.ui.components.inputs :refer [wrapped-input]]
             [keechma.next.toolbox.logging :as l]
+            [tick.alpha.api :as t]
+
 
             [app.ui.components.header :refer [Header]]))
 
 (defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
 
-(defnc TableItem [{:keys [projectId projectName roleId assignmentDate roleName id] :as props}]
+(defnc TableItem [{:keys [projectId projectName roleId roleName assignmentDate id person-name person-surname person-id] :as props}]
        (d/tr {:class "border-b border-solid border-gray-700  hover:bg-gray-900 cursor-pointer"
-              ;; ONCLICK promijeniti na zaduzenje-edit
-              :on-click #(redirect! props :router {:page "projectedit"
-                                                   :id (:projectId props)})}
+              :on-click #(redirect! props :router {:page           "ulogaosobeuredi"
+                                                   :project        projectName
+                                                   :projectId      projectId
+                                                   :person-name    person-name
+                                                   :person-surname person-surname
+                                                   :person-id      person-id
+                                                   :role           roleName
+                                                   :roleId         roleId})}
+
              (d/td {:class "pl-2 py-2 text-white"} projectName)
              (d/td {:class "pl-2 py-2 text-white"} roleName)
-             (d/td {:class "pl-2 py-2 text-white"} assignmentDate)))
+             (d/td {:class "pl-2 py-2 text-white"}
+                   (if (= assignmentDate "1609459200000")
+                     (str (t/inst (t/new-duration assignmentDate :millis)))
+                     assignmentDate))))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -29,7 +40,11 @@
 
 (defnc Renderer [props]
        (let [person-roles (use-sub props :person-role-by-personid)
-             roles (get-in (use-sub props :roles) [:allRole])
+             roles (use-sub props :roles)
+             route (use-sub props :router)
+             person-name (:firstName route)
+             person-surname (:lastName route)
+             person-id (:id route)
              projects (get-in (use-sub props :projects) [:allProject])]
                ($ PageWrapper
                       ($ Header {:naslov "Uredi podatke osobe"})
@@ -79,11 +94,14 @@
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                              (d/tbody
                                                (map (fn [person-role]
-                                                        ($ TableItem {:projectId       (:ProjectCode person-role)
+                                                        ($ TableItem {:projectId      (:ProjectCode person-role)
                                                                       :projectName    (:projectName person-role)
                                                                       :roleId         (:RoleId person-role)
                                                                       :assignmentDate (:AssignmentDate person-role)
                                                                       :roleName       (:roleName person-role)
+                                                                      :person-name    person-name
+                                                                      :person-surname person-surname
+                                                                      :person-id      person-id
                                                                       :key            (:id person-role)
                                                                       :id             (:id person-role)
                                                                       &        props}))
