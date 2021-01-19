@@ -5,6 +5,7 @@
             [app.controllers.forms.project]
             [app.controllers.forms.person-role]
             [app.controllers.forms.person-role-edit]
+            [app.controllers.forms.person-role-edit-project]
             [app.controllers.forms.person-edit]
             [app.controllers.forms.project-edit]
             [app.controllers.forms.role-edit]
@@ -52,6 +53,7 @@
                                                                       (page-equal? router "ulogaosobe")
                                                                       (page-equal? router "projectedit")
                                                                       (page-equal? router "ulogaosobeuredi")
+                                                                      (page-equal? router "ulogaosobeurediprojektnobazirano")
                                                                       (page-equal? router "personedit")))
                                                       :deps   [:router :entitydb]}
 
@@ -60,7 +62,7 @@
                                                     (->> (map (fn [role] [(:id role) {:keechma.controller/params role}])
                                                               roles)
                                                          (into {})))
-                                 :keechma.controller/deps [:roles]}
+                                 :keechma.controller/deps [:roles :entitydb]}
 
        :role-form               #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (or (page-equal? router "uloga")
@@ -72,6 +74,7 @@
                                                                   (or (page-equal? router "osoba")
                                                                       (page-equal? router "ulogaosobe")
                                                                       (page-equal? router "projectedit")
+                                                                      (page-equal? router "ulogaosobeurediprojektnobazirano")
                                                                       (page-equal? router "ulogaosobeuredi")))
                                                       :deps   [:router :entitydb]}
        :person-edit-form        #:keechma.controller {:params (fn [{:keys [router]}]
@@ -102,6 +105,10 @@
        :person-role-edit-form        #:keechma.controller {:params (fn [{:keys [router]}]
                                                                   (page-equal? router "ulogaosobeuredi"))
                                                       :deps   [:router :entitydb]}
+
+       :person-role-edit-project-form        #:keechma.controller {:params (fn [{:keys [router]}]
+                                                                       (page-equal? router "ulogaosobeurediprojektnobazirano"))
+                                                           :deps   [:router :entitydb]}
 
        ;; UTILITY
        :person-role-by-personid #:keechma.controller {:params (fn [{:keys [router]}]

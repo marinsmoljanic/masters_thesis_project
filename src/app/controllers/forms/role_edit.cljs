@@ -5,28 +5,25 @@
             [keechma.next.controllers.form :as form]
             [keechma.next.controllers.router :as router]
             [keechma.next.controllers.entitydb :as edb]
-            [app.gql :refer [m!]]
+            [app.gql :refer [m! q!]]
             [app.validators :as v]))
 
 (derive :role-edit-form ::pipelines/controller)
 
 (def pipelines
   {:keechma.form/get-data    (pipeline! [value {:keys [deps-state*] :as ctrl}]
-                                        ;; (println "FORM " (:id value)  " - " value)
                                         value)
 
    :keechma.form/submit-data (pipeline! [value {:keys [deps-state*] :as ctrl}]
-                                        (println "VALUE from controler: " value)
                                         (m! [:update-role [:updateRole]] {:id (:id value)
                                                                           :name (:Name value)})
-                                        #_(ctrl/broadcast ctrl :anon/login value)
-                                        (router/redirect! ctrl :router {:page ""}))
+                                        (q! [:roles [:allRole]] {})
+                                        (edb/insert-collection! ctrl :entitydb :role :role/list value))
+
    :delete                   (pipeline! [value {:keys [deps-state*] :as ctrl}]
-                                        ;;(println "Value: " value)
                                         (m! [:delete-role [:deleteRole]] {:id value})
-                                        #_(ctrl/broadcast ctrl :anon/login value)
-                                        (router/redirect! ctrl :router {:page ""}))
-   })
+                                        (q! [:roles [:allRole]] {})
+                                        (edb/insert-collection! ctrl :entitydb :role :role/list value))})
 
 (defmethod ctrl/prep :role-edit-form [ctrl]
            (pipelines/register ctrl

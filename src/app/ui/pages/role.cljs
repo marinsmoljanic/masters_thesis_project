@@ -9,7 +9,8 @@
             [app.ui.components.inputs :refer [wrapped-input input]]
             [app.ui.components.header :refer [Header]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800
+                                 md:h-full md:mx-auto md:w-2/3 md:pb-2 shadow")
 
 (defnc RoleItemForm [{:keys [form-id] :as props}]
        (let [form-ident [:role-edit-form form-id]

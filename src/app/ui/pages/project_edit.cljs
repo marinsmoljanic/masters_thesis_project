@@ -11,25 +11,24 @@
             [app.ui.components.inputs :refer [wrapped-input]]
             [app.ui.components.header :refer [Header]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800
+                                 md:h-full md:mx-auto md:w-2/3 shadow")
 
 (defnc TableItem [{:keys [personId personName roleId assignmentDate roleName project-code project-name person-role-id] :as props}]
        (d/tr {:class "border-b border-solid border-gray-700  hover:bg-gray-900 cursor-pointer"
               :on-click #(redirect! props :router {:page            "ulogaosobeurediprojektnobazirano"
-                                                  :project-name    project-name
-                                                  :project-id      project-code
-                                                  :person-name     personName
-                                                  :person-id       personId
-                                                  :assignment-date assignmentDate
-                                                  :role-name       roleName
-                                                  :role-id         roleId})}
+                                                   :person-role     person-role-id
+                                                   :project-name    project-name
+                                                   :project-id      project-code
+                                                   :person-name     personName
+                                                   :person-id       personId
+                                                   :assignment-date assignmentDate
+                                                   :role-name       roleName
+                                                   :role-id         roleId})}
 
              (d/td {:class "pl-2 py-2 text-white"} personName)
              (d/td {:class "pl-2 py-2 text-white"} roleName)
-             (d/td {:class "pl-2 py-2 text-white"}
-                   (if (= assignmentDate "1609459200000")
-                     (str (t/inst (t/new-duration assignmentDate :millis)))
-                     assignmentDate))))
+             (d/td {:class "pl-2 py-2 text-white"} assignmentDate)))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -43,7 +42,8 @@
              persons (use-sub props :persons)]
             ($ PageWrapper
                ($ Header {:naslov "Uredi podatke projekta"})
-               (d/div {:class "min-w-full mt-8 px-4 text-white"}
+               (d/div {:class "min-w-full mt-8 px-4 text-white
+                               md:min-h-full md:pb-4"}
                       (d/form {:on-submit (fn [e]
                                               (.preventDefault e)
                                               (dispatch props :project-edit-form :keechma.form/submit))}
@@ -62,14 +62,14 @@
                                               :placeholder             "Opis projekta"})
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Datum pocetka")
                               (wrapped-input {:keechma.form/controller :project-edit-form
-                                              :input/type              :text
+                                              :input/type              :date
                                               :input/attr              :startDate
                                               :placeholder             "Datum pocetka"})
 
                               (d/div {:class "max-width-full h-6 transparent"})
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Datum zavrsetka")
                               (wrapped-input {:keechma.form/controller :project-edit-form
-                                              :input/type              :text
+                                              :input/type              :date
                                               :input/attr              :endDate
                                               :placeholder             "Datum zavrsetka"})
 
@@ -83,7 +83,6 @@
                                      (d/button {:class "block margin-auto border w-56 px-4 py-3 rounded-sm
                                                         text-md font-medium text-white bg-transparent hover:bg-gray-700"}
                                                "Spremi")))
-
 
                       (d/div {:class "w-full mt-12  flex flex-row border-t border-dotted border-gray-600"}
                              (d/div {:class "flex justify-start text-normal font-thin text-gray-400 pt-4 pb-2 w-1/2 "}

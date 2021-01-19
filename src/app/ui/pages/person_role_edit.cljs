@@ -10,7 +10,8 @@
             [keechma.next.helix.classified :refer [defclassified]]
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800 relative")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800
+                                 md:h-full md:mx-auto md:w-2/3 md:pb-2 md:pb-8 shadow")
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -39,12 +40,13 @@
              person-id (:id route)
              project (:project route)]
             ($ PageWrapper
-               ($ Header {:naslov "Dodjela zaduzenja"})
+               ($ Header {:naslov "Uređivanje zaduženja"})
 
                (d/div {:class "m-auto min-w-full mt-8 px-4 text-white"}
                       (d/form {:on-submit (fn [e]
                                               (.preventDefault e)
-                                              (dispatch props :person-role-edit-form :keechma.form/submit))}
+                                              (dispatch props :person-role-edit-form :keechma.form/submit)
+                                              (router/back! props :router))}
 
                               (d/div {:class "text-3xl text-white text-center w-full mb-6 mt-6"}
                                    (str person-name " " person-surname))
@@ -53,7 +55,6 @@
                               (wrapped-input {:keechma.form/controller :person-role-edit-form
                                               :input/type :select
                                               :input/attr :project
-                                              :value      project
                                               :options    projects-select-value})
 
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6 pt-6"} "Uloga")
@@ -68,8 +69,15 @@
                                               :input/attr              :date
                                               :placeholder             "DD/MM/GG"})
 
-                              (d/div {:class "w-full mt-8"}
+                              (d/div {:class "w-full mt-8 flex flex-row justify-between px-12"}
                                      (d/button {:class    "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
-                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700"} "Pohrani promjene")))))))
+                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700 hover:border-red-400"
+                                                :type     "button"
+                                                :on-click (fn [_] (dispatch props :person-role-edit-form :delete)
+                                                                  (router/back! props :router))} "Obrisi zaduzenje")
+                                     (d/button {:class    "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
+                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700"} "Pohrani promjene"))
+
+                              )))))
 
 (def PersonRoleEditForm (with-keechma Renderer))

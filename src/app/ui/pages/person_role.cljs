@@ -10,7 +10,8 @@
             [keechma.next.helix.classified :refer [defclassified]]
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800 relative")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800
+                                 md:h-full md:mx-auto md:w-2/3 md:pb-2 md:pb-8 shadow")
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -38,7 +39,8 @@
                (d/div {:class "m-auto min-w-full mt-8 px-4 text-white"}
                         (d/form {:on-submit (fn [e]
                                                 (.preventDefault e)
-                                                (dispatch props :person-role-form :keechma.form/submit))}
+                                                (dispatch props :person-role-form :keechma.form/submit)
+                                                (router/back! props :router))}
 
                                 (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Projekt")
                                 (wrapped-input {:keechma.form/controller :person-role-form

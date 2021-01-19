@@ -11,7 +11,7 @@
             [app.ui.components.forms.osoba :refer [PersonForm]]))
 
 (defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800
-                                 md:h-full md:mx-auto md:w-1/2 shadow")
+                                 md:h-full md:mx-auto md:w-2/3 shadow")
 
 (defnc TableItem [props]
        (d/tr {:class "border-b border-solid border-gray-700 cursor-pointer hover:bg-gray-900"
@@ -35,7 +35,7 @@
             (d/div {:class "md:pb-8 md:border-solid md:border-b-2 md:border-l md:border-r md:border-orange-400"}
                   ($ PersonForm)
                   (d/div {:class "flex justify-end py-8 px-8 absolute w-full
-                                  md:w-1/2 md:mt-8"}
+                                  md:w-2/3 md:mt-8"}
                          (d/button {:class "bg-transparent border-solid border-2 border-red-600 rounded-full text-white h-20 w-20 justify-center items-center text-4xl font-thin focus:outline-none
                                             md:bg-gray-600 md:justify-end md:border-red-800"
                                     :on-click #(dispatch props :person-form :toggle nil)}
@@ -58,11 +58,10 @@
                                                       &        props}))
                                    persons))
                             (d/div {:class "flex justify-end py-8 px-8 absolute w-full
-                                            md:w-1/2"}
+                                            md:w-2/3"}
                                    (d/button {:class (str (if is-form-open? "bg-transparent border-solid border-2 border-red-600 " "bg-orange-600 ") "rounded-full text-white h-20 w-20 justify-center items-center text-4xl font-thin focus:outline-none
                                                                              md:bg-orange-600")
                                               :on-click #(dispatch props :person-form :toggle nil)}
-                                             (if is-form-open? "x" "+"))
-                                   )))))))
+                                             (if is-form-open? "x" "+")))))))))
 
 (def Person (with-keechma Renderer))

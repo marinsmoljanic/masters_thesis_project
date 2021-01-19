@@ -71,7 +71,6 @@ mutation CreateRole($name: String!){
 mutation CreatePersonRole($project: String!, $role: String!, $person: String!, $date: String!){
     createPersonRole(ProjectCode: $project RoleId: $role PersonId: $person AssignmentDate: $date) {
         personrole{
-            ProjectCode
             RoleId
             PersonId
         }
@@ -114,6 +113,20 @@ mutation UpdateRole($id: ID, $name: String!){
         }
     }
 }
+mutation UpdatePersonRole($oldProject: String! $project: String!, $role: String!, $date: String!){
+    updatePersonRole(OldProjectCode: $oldProject ProjectCode: $project RoleId: $role AssignmentDate: $date) {
+        personRole{
+            RoleId
+        }
+    }
+}
+mutation UpdatePersonRoleByProject($personroleid: String! $person: String!, $role: String!, $date: String!){
+    updatePersonRoleByProject(PersonRoleId: $personroleid PersonId: $person RoleId: $role AssignmentDate: $date) {
+        personRole{
+            RoleId
+        }
+    }
+}
 
 
 
@@ -127,6 +140,13 @@ mutation DeletePerson($id: ID){
         person{
             FirstName
             LastName
+        }
+    }
+}
+mutation DeletePersonRole($personrole: String!){
+    deletePersonRole(SifProjekta: $personrole) {
+        personRole{
+            RoleId
         }
     }
 }

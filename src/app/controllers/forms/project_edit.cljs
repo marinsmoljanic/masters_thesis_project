@@ -27,7 +27,6 @@
                                                                                 :startDate   (:startDate value)
                                                                                 :endDate     (:endDate value)})
                                         (router/redirect! ctrl :router {:page "projekt"}))
-
    })
 
 (defmethod ctrl/prep :project-edit-form [ctrl]

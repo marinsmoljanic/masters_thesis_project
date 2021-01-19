@@ -6,19 +6,18 @@
             [keechma.next.helix.core :refer [with-keechma dispatch]]
             [keechma.next.helix.classified :refer [defclassified]]
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]
-
             [app.ui.components.inputs :refer [wrapped-input]]
             [keechma.next.toolbox.logging :as l]
             [tick.alpha.api :as t]
-
-
             [app.ui.components.header :refer [Header]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800
+                                 md:h-full md:mx-auto md:w-2/3 shadow")
 
 (defnc TableItem [{:keys [projectId projectName roleId roleName assignmentDate id person-name person-surname person-id] :as props}]
-       (d/tr {:class "border-b border-solid border-gray-700  hover:bg-gray-900 cursor-pointer"
+       (d/tr {:class    "border-b border-solid border-gray-700  hover:bg-gray-900 cursor-pointer"
               :on-click #(redirect! props :router {:page           "ulogaosobeuredi"
+                                                   :person-role    (str id)
                                                    :project        projectName
                                                    :projectId      projectId
                                                    :person-name    person-name
@@ -29,10 +28,7 @@
 
              (d/td {:class "pl-2 py-2 text-white"} projectName)
              (d/td {:class "pl-2 py-2 text-white"} roleName)
-             (d/td {:class "pl-2 py-2 text-white"}
-                   (if (= assignmentDate "1609459200000")
-                     (str (t/inst (t/new-duration assignmentDate :millis)))
-                     assignmentDate))))
+             (d/td {:class "pl-2 py-2 text-white"} assignmentDate)))
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -48,7 +44,8 @@
              projects (get-in (use-sub props :projects) [:allProject])]
                ($ PageWrapper
                       ($ Header {:naslov "Uredi podatke osobe"})
-                             (d/div {:class "min-w-full min-h-screen mt-8 px-4 text-white"}
+                             (d/div {:class "min-w-full min-h-screen mt-8 px-4 text-white
+                                             md:min-h-full md:pb-4"}
                                     (d/form {:on-submit (fn [e]
                                                           (.preventDefault e)
                                                           (dispatch props :person-edit-form :keechma.form/submit))}
@@ -94,6 +91,7 @@
                                                             (d/th {:class "w-1/2 px-4 py-2 font-base border-l border-r border-solid border-orange-500"} "Datum zaduzenja")))
                                              (d/tbody
                                                (map (fn [person-role]
+                                                        (l/pp "------------>" person-role)
                                                         ($ TableItem {:projectId      (:ProjectCode person-role)
                                                                       :projectName    (:projectName person-role)
                                                                       :roleId         (:RoleId person-role)

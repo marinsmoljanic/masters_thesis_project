@@ -10,7 +10,8 @@
             [keechma.next.helix.classified :refer [defclassified]]
             [keechma.next.helix.core :refer [with-keechma use-meta-sub dispatch call use-sub]]))
 
-(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800 relative")
+(defclassified PageWrapper :div "flex flex-col h-screen w-screen bg-gray-800 relative
+                                 md:h-full md:mx-auto md:w-2/3 md:pb-2 md:pb-8 shadow")
 
 (defnc RenderErrors [{:keys [error] :as props}]
        (d/div {:class "text-redDark text-xs pt-2"}
@@ -43,29 +44,30 @@
              role-id (:role-id route)]
 
             ($ PageWrapper
-               ($ Header {:naslov "Dodjela zaduzenja"})
+               ($ Header {:naslov "Uređivanje zaduženja"})
 
                (d/div {:class "m-auto min-w-full mt-8 px-4 text-white"}
                       (d/form {:on-submit (fn [e]
                                               (.preventDefault e)
-                                              (dispatch props :person-role-edit-form :keechma.form/submit))}
+                                              (dispatch props :person-role-edit-project-form :keechma.form/submit)
+                                              (router/back! props :router))}
 
                               (d/div {:class "text-3xl text-white text-center w-full mb-6 mt-6"} project-name)
 
-                              (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Projekt")
-                              (wrapped-input {:keechma.form/controller :person-role-edit-form
+                              (d/p {:class "text-sm text-grayLight text-left w-full mb-6"} "Osoba")
+                              (wrapped-input {:keechma.form/controller :person-role-edit-project-form
                                               :input/type :select
-                                              :input/attr :project
-                                              :options    projects-select-value})
+                                              :input/attr :person
+                                              :options    persons-select-value})
 
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6 pt-6"} "Uloga")
-                              (wrapped-input {:keechma.form/controller :person-role-edit-form
+                              (wrapped-input {:keechma.form/controller :person-role-edit-project-form
                                               :input/type :select
                                               :input/attr :role
                                               :options    roles-select-value})
 
                               (d/p {:class "text-sm text-grayLight text-left w-full mb-6 pt-6"} "Datum dodjele")
-                              (wrapped-input {:keechma.form/controller :person-role-edit-form
+                              (wrapped-input {:keechma.form/controller :person-role-edit-project-form
                                               :input/type              :date
                                               :input/attr              :date
                                               :placeholder             "DD/MM/GG"})
@@ -74,8 +76,9 @@
                                      (d/button {:class "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
                                                        text-md font-medium text-white bg-transparent hover:bg-gray-700 hover:border-red-400"
                                                 :type "button"
-                                                :on-click #(println "BRISANJEEEE")} "Obrisi zaduzenje")
+                                                :on-click (fn [_] (dispatch props :person-role-edit-project-form :delete)
+                                                                  (router/back! props :router))} "Obrisi zaduzenje")
                                      (d/button {:class    "block margin-auto mx-auto border w-56 px-4 py-3 rounded-sm
-                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700"} "Pohrani promjene")))))))
+                                                       text-md font-medium text-white bg-transparent hover:bg-gray-700"} "Pohrani izmjene")))))))
 
 (def PersonRoleEditProjectBasedForm (with-keechma Renderer))
